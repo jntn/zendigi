@@ -14,10 +14,10 @@ const eventEntry = types
     }
     return {
       get start() {
-        return timeline().scale(self.startTime)
+        return timeline().scale()(self.startTime)
       },
       get end() {
-        return timeline().scale(self.endTime)
+        return timeline().scale()(self.endTime)
       }
     }
   })
