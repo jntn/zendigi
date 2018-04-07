@@ -1,9 +1,11 @@
 import * as React from 'react'
 import { inject, observer } from 'mobx-react'
-import TimelineStore from './stores/TimelineStore'
-import Timeline from './components/Timeline'
 import { zoom, ZoomBehavior } from 'd3-zoom'
 import { event, select } from 'd3-selection'
+import { Box } from 'rebass'
+import TimelineStore from './stores/TimelineStore'
+import Timeline from './components/Timeline'
+import Header from './components/Header'
 
 interface Props {
   timelineStore?: typeof TimelineStore.Type
@@ -34,8 +36,13 @@ class App extends React.Component<Props> {
 
   render() {
     return (
-      <div ref={app => (this.app = app!)}>
-        <Timeline />
+      <div>
+        <Header />
+        <Box p={2}>
+          <div ref={app => (this.app = app!)}>
+            <Timeline />
+          </div>
+        </Box>
       </div>
     )
   }
