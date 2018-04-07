@@ -1,7 +1,6 @@
 import * as React from 'react'
 import { observer } from 'mobx-react'
 import { withTheme } from 'styled-components'
-
 import { Group, Rect, Text } from 'react-konva'
 import Event from '../stores/models/Event'
 import { Theme } from 'rebass'

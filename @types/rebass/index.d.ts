@@ -115,8 +115,8 @@ declare module 'rebass' {
     alignContent?: Responsive
   }
 
-  export interface JustifyContent {
-    justifyContent?: Responsive
+  export interface Justify {
+    justify?: Responsive
   }
 
   export interface FlexWrap {
@@ -315,11 +315,7 @@ declare module 'rebass' {
   }
 
   // TODaO
-  interface FlexProps
-    extends FlexWrap,
-      FlexDirection,
-      AlignItems,
-      JustifyContent {}
+  interface FlexProps extends FlexWrap, FlexDirection, AlignItems, Justify {}
   type FlexClass = React.StatelessComponent<FlexProps>
   export const Flex: FlexClass
 
@@ -340,7 +336,7 @@ declare module 'rebass' {
     colors?: {
       [name: string]: string
     }
-    radii?: Responsive
+    radius?: number
   }
 
   interface Yolo {
@@ -578,7 +574,7 @@ declare module 'rebass' {
       Space,
       FlexDirection,
       AlignItems,
-      JustifyContent,
+      Justify,
       BackgroundSize,
       BackgroundImage,
       BackgroundPosition,
