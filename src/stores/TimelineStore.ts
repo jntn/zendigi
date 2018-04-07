@@ -19,8 +19,6 @@ const timelineStore = types
 
     return {
       get placedEvents() {
-        extentWithRowPlacement(self.events)
-
         return self.events
       },
       scale,
@@ -43,7 +41,7 @@ const timelineStore = types
     }
 
     function updateEvents(json: any) {
-      self.events = json.events.map((x: any) => {
+      const rawEvents = json.events.map((x: any) => {
         return {
           id: x.id,
           title: x.title,
@@ -51,6 +49,9 @@ const timelineStore = types
           endTime: new Date(x.endTime)
         }
       })
+      extentWithRowPlacement(rawEvents)
+
+      self.events = rawEvents
 
       setDomainToDefault()
     }
@@ -66,7 +67,7 @@ const timelineStore = types
 
     function zoom(transform: any) {
       setDomainToDefault()
-      const t = transform.rescaleX(self.scale).domain()
+      const t = transform.rescaleX(self.scale()).domain()
       self.domain = t
     }
 

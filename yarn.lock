@@ -85,17 +85,17 @@
     "@types/node" "*"
     "@types/react" "*"
 
+"@types/react-motion@^0.0.25":
+  version "0.0.25"
+  resolved "https://registry.yarnpkg.com/@types/react-motion/-/react-motion-0.0.25.tgz#2445745ee8e8e6149faa47a36ff6b0d4c21dbf94"
+  dependencies:
+    "@types/react" "*"
+
 "@types/react@*", "@types/react@^16.3.5":
   version "16.3.5"
   resolved "https://registry.yarnpkg.com/@types/react/-/react-16.3.5.tgz#bd3b21285602ea7cadb4b9e0d9711d96fd5692cc"
   dependencies:
     csstype "^2.0.0"
-
-"@types/rebass@^0.2.19":
-  version "0.2.19"
-  resolved "https://registry.yarnpkg.com/@types/rebass/-/rebass-0.2.19.tgz#ae21d14509068efeda0e20741337fcab0aa5391d"
-  dependencies:
-    "@types/react" "*"
 
 abab@^1.0.4:
   version "1.0.4"
@@ -4448,6 +4448,10 @@ klaw@^1.0.0:
   optionalDependencies:
     graceful-fs "^4.1.9"
 
+konva@^2.0.2:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/konva/-/konva-2.0.2.tgz#e9b22f18c5fe3fb0012cd6ef234bf602818a60e1"
+
 latest-version@^3.0.0:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/latest-version/-/latest-version-3.1.0.tgz#a205383fea322b33b5ae3b18abee0dc2f356ee15"
@@ -5779,7 +5783,7 @@ promise@^7.1.1:
   dependencies:
     asap "~2.0.3"
 
-prop-types@^15.5.4, prop-types@^15.6.0:
+prop-types@^15.5.4, prop-types@^15.5.8, prop-types@^15.6.0:
   version "15.6.1"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.6.1.tgz#36644453564255ddda391191fb3a125cbdf654ca"
   dependencies:
@@ -5874,7 +5878,7 @@ querystringify@~1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/querystringify/-/querystringify-1.0.0.tgz#6286242112c5b712fa654e526652bf6a13ff05cb"
 
-raf@3.4.0:
+raf@3.4.0, raf@^3.1.0:
   version "3.4.0"
   resolved "https://registry.yarnpkg.com/raf/-/raf-3.4.0.tgz#a28876881b4bc2ca9117d4138163ddb80f781575"
   dependencies:
@@ -5972,6 +5976,14 @@ react-konva@^1.7.1:
   dependencies:
     fbjs "^0.8.16"
     react-reconciler "^0.7.0"
+
+react-motion@^0.5.2:
+  version "0.5.2"
+  resolved "https://registry.yarnpkg.com/react-motion/-/react-motion-0.5.2.tgz#0dd3a69e411316567927917c6626551ba0607316"
+  dependencies:
+    performance-now "^0.2.0"
+    prop-types "^15.5.8"
+    raf "^3.1.0"
 
 react-reconciler@^0.7.0:
   version "0.7.0"

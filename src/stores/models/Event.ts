@@ -6,19 +6,30 @@ const eventEntry = types
     startTime: types.Date,
     endTime: types.Date,
     title: types.string,
-    description: types.optional(types.string, '')
+    description: types.optional(types.string, ''),
+    row: types.optional(types.number, 0)
   })
   .views(self => {
     function timeline() {
       return getRoot(self)
     }
+
+    function start(): number {
+      return timeline().scale()(self.startTime)
+    }
+
+    function end(): number {
+      return timeline().scale()(self.endTime)
+    }
+
+    function width(): number {
+      return end() - start()
+    }
+
     return {
-      get start() {
-        return timeline().scale()(self.startTime)
-      },
-      get end() {
-        return timeline().scale()(self.endTime)
-      }
+      start,
+      end,
+      width
     }
   })
 
