@@ -22,10 +22,9 @@
     "styled-components": "^3.2.5"
   },
   "scripts": {
-    "start": "react-scripts-ts start",
+    "dev": "react-scripts-ts start",
     "build": "react-scripts-ts build",
-    "test": "react-scripts-ts test --env=jsdom",
-    "eject": "react-scripts-ts eject"
+    "test": "react-scripts-ts test --env=jsdom"
   },
   "devDependencies": {
     "@types/d3-scale": "^2.0.0",
