@@ -1,0 +1,2 @@
+-- getAllPosts
+select * from post
