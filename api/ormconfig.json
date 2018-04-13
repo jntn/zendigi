@@ -3,7 +3,7 @@
   "host": "zendigi1.cgev1g86fd95.eu-west-1.rds.amazonaws.com",
   "port": 5432,
   "username": "jntn",
-  "password": "sMp-zKb-843-Ygw",
+  "password": "",
   "database": "zendigi",
   "synchronize": true,
   "entities": ["build/entity/*.js"],
