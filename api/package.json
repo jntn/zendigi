@@ -1,4 +1,8 @@
 {
+  "name": "zendigi-api",
+  "version": "0.0.1",
+  "license": "MIT",
+  "private": true,
   "dependencies": {
     "co-body": "^5.1.1",
     "dotenv": "^5.0.1",
@@ -6,7 +10,7 @@
     "koa": "^2.5.0",
     "koa-json": "^2.0.2",
     "pg": "^7.4.1",
-    "yesql": "^3.2.0"
+    "puresql": "^1.6.0"
   },
   "scripts": {
     "start": "node app"
