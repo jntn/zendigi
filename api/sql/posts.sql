@@ -9,4 +9,4 @@ from category
 where id = :id
 
 -- name: getAll
-SELECT * FROM event
+select * from event

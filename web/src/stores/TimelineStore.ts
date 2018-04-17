@@ -1,7 +1,22 @@
 import { types, flow } from 'mobx-state-tree'
 import { scaleTime } from 'd3-scale'
+import { GraphQLClient } from 'graphql-request'
 import { extentWithRowPlacement } from '../helpers/time-helpers'
 import Event from './models/Event'
+
+const client = new GraphQLClient('/api', { headers: {} })
+
+const eventQuery = `{
+  category(id: 1) {
+    id
+    events {
+      id
+      title
+      startTime
+      endTime
+    } 
+  }
+}`
 
 const timelineStore = types
   .model('TimelineStore', {
@@ -58,8 +73,8 @@ const timelineStore = types
 
     const loadEvents = flow(function* loadEvents() {
       try {
-        const json = yield fetch('/events.json').then(x => x.json())
-        updateEvents(json)
+        const result = yield client.request(eventQuery)
+        updateEvents(result.category)
       } catch (err) {
         console.error('Failed to load books ', err)
       }
