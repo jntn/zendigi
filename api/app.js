@@ -2,7 +2,7 @@ const Schema = require('graph.ql')
 const json = require('koa-json')
 const body = require('co-body')
 const Koa = require('koa')
-const _ = require('koa-route')
+const { post } = require('koa-route')
 const puresql = require('puresql')
 const { Client } = require('pg')
 
@@ -63,7 +63,7 @@ const app = new Koa()
 app.use(json({ pretty: false, param: 'pretty' }))
 
 app.use(
-  _.post('/api', async ctx => {
+  post('/api', async ctx => {
     const { query } = await body.json(ctx)
     const result = await schema.query(query)
 
