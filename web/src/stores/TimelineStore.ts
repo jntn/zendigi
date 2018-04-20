@@ -76,7 +76,7 @@ const timelineStore = types
         const result = yield client.request(eventQuery)
         updateEvents(result.category)
       } catch (err) {
-        console.error('Failed to load books ', err)
+        console.error('Failed to load events ', err)
       }
     })
 
