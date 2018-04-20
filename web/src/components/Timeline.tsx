@@ -3,7 +3,7 @@ import { inject, observer } from 'mobx-react'
 import { Stage, Layer } from 'react-konva'
 import { Motion, spring, presets } from 'react-motion'
 import TimelineStore from '../stores/TimelineStore'
-import Bar from './Bar'
+import Row from './Row'
 
 interface Props {
   timelineStore?: typeof TimelineStore.Type
@@ -13,7 +13,7 @@ interface Props {
 @observer
 class Timeline extends React.Component<Props> {
   render() {
-    const events = this.props.timelineStore!.placedEvents
+    const rows = this.props.timelineStore!.eventsAsRows()
     const end = this.props.timelineStore!.end
     return (
       <Stage width={end} height={window.innerHeight}>
@@ -26,7 +26,7 @@ class Timeline extends React.Component<Props> {
         >
           {style => (
             <Layer y={style.y} opacity={style.opacity}>
-              {events.map(x => <Bar key={x.id} event={x} />)}
+              {rows.map((x, i) => <Row key={i} events={x} rowNumber={i} />)}
             </Layer>
           )}
         </Motion>

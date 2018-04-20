@@ -1,28 +1,33 @@
-let rows = {}
+import EventEntry from '../stores/models/EventEntry'
+let rows: typeof EventEntry.Type[][]
 
-const addToRow = function addToRow(event: any, i: number) {
+const addToRow = function addToRow(event: typeof EventEntry.Type, i: number) {
   if (!rows[i]) rows[i] = []
 
   rows[i].push(event)
-  event.row = i
 }
 
-const getEventsBefore = function getEventsBefore(event: any, events: any) {
+const getEventsBefore = function getEventsBefore(
+  event: typeof EventEntry.Type,
+  events: typeof EventEntry.Type[]
+) {
   return events.filter((e: any) => {
     return e.startTime < event.startTime
   })
 }
 
 const getOverlappingEvents = function getOverlappingEvents(
-  event: any,
-  events: any
+  event: typeof EventEntry.Type,
+  events: typeof EventEntry.Type[]
 ) {
-  return events.filter((e: any) => {
+  return events.filter(e => {
     return event.endTime > e.startTime && event.startTime < e.endTime
   })
 }
 
-const findRowWithoutOverlap = function findRowWithoutOverlap(event: any) {
+const findRowWithoutOverlap = function findRowWithoutOverlap(
+  event: typeof EventEntry.Type
+) {
   let row = 0
 
   for (let i = 0; i < Object.keys(rows).length; i = i + 1) {
@@ -38,11 +43,11 @@ const findRowWithoutOverlap = function findRowWithoutOverlap(event: any) {
   return row
 }
 
-export const extentWithRowPlacement = function extentWithRowPlacement(
-  events: any
+export const getEventsAsRows = function getEventsAsRows(
+  events: typeof EventEntry.Type[]
 ) {
-  rows = {}
-  events.forEach((e: any, i: any) => {
+  rows = []
+  events.forEach((e, i) => {
     if (i === 0) addToRow(e, i)
 
     if (i !== 0) {
@@ -59,15 +64,6 @@ export const extentWithRowPlacement = function extentWithRowPlacement(
       }
     }
   })
-}
 
-export const extendWithHorizatalPlacement = function extendWithHorizatalPlacement(
-  event: any,
-  events: any,
-  scale: any
-) {
-  event.yStart = scale(event.startTime)
-  event.yEnd = scale(event.endTime)
-
-  return event
+  return rows
 }

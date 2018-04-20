@@ -1,8 +1,8 @@
 import { types, flow } from 'mobx-state-tree'
 import { scaleTime } from 'd3-scale'
 import { GraphQLClient } from 'graphql-request'
-import { extentWithRowPlacement } from '../helpers/time-helpers'
-import Event from './models/Event'
+import { getEventsAsRows } from '../helpers/time-helpers'
+import EventEntry from './models/EventEntry'
 
 const client = new GraphQLClient('/api', { headers: {} })
 
@@ -22,7 +22,7 @@ const timelineStore = types
   .model('TimelineStore', {
     start: types.optional(types.number, 0),
     end: types.optional(types.number, 0),
-    events: types.optional(types.array(Event), []),
+    events: types.optional(types.array(EventEntry), []),
     domain: types.optional(types.array(types.Date), [new Date(), new Date()])
   })
   .views(self => {
@@ -33,8 +33,8 @@ const timelineStore = types
     }
 
     return {
-      get placedEvents() {
-        return self.events
+      eventsAsRows() {
+        return getEventsAsRows(self.events)
       },
       scale,
       get ticks() {
@@ -64,7 +64,7 @@ const timelineStore = types
           endTime: new Date(x.endTime)
         }
       })
-      extentWithRowPlacement(rawEvents)
+      // extentWithRowPlacement(rawEvents)
 
       self.events = rawEvents
 
