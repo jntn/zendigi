@@ -1,0 +1,15 @@
+schema {
+  query: Query
+}
+
+# The query type, represents all of the entry points into our object graph
+type Query {
+  getUser(id: ID!): User
+}
+
+# what is needed for a user
+type User {
+  id: ID
+  name: String
+  email: String
+}
