@@ -25,7 +25,7 @@ class Bar extends React.Component<Props> {
         <Rect
           width={e.width()}
           height={32}
-          fill={theme!.colors!.teal4}
+          fill={theme!.colors!.teal}
           cornerRadius={15}
         />
         <Text
@@ -33,7 +33,7 @@ class Bar extends React.Component<Props> {
           y={9}
           x={10}
           fill="white"
-          fontFamily={theme!.font!}
+          fontFamily="menlo"
           fontSize={theme!.fontSizes![1]}
         />
       </Group>

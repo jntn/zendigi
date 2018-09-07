@@ -4,7 +4,7 @@ import { withTheme } from 'styled-components'
 import styled from '../styled'
 
 const BorderBottom = styled.div`
-  border-bottom: 1px solid ${props => props.theme!.colors!.gray1};
+  border-bottom: 1px solid ${props => props.theme!.colors!.gray};
 `
 interface Props {
   theme?: Theme

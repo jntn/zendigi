@@ -1,4 +1,5 @@
 import { types, getRoot } from 'mobx-state-tree'
+import TimelineStore from '../TimelineStore'
 
 const eventEntry = types
   .model('Event', {
@@ -11,7 +12,7 @@ const eventEntry = types
   })
   .views(self => {
     function timeline() {
-      return getRoot(self)
+      return getRoot<typeof TimelineStore.Type>(self)
     }
 
     function start(): number {

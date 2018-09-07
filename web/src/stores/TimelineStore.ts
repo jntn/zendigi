@@ -14,7 +14,7 @@ import Event from './models/Event'
 //       title
 //       startTime
 //       endTime
-//     } 
+//     }
 //   }
 // }`
 
@@ -38,10 +38,10 @@ const timelineStore = types
       },
       scale,
       get ticks() {
-        return scale().ticks(50)
+        return scale().ticks(100)
       },
       get tickFormat() {
-        return scale().tickFormat(50)
+        return scale().tickFormat(0, '%Y')
       }
     }
   })
@@ -52,7 +52,8 @@ const timelineStore = types
         self.events[self.events.length - 1] &&
         self.events[self.events.length - 1].endTime
 
-      self.domain = [domainStart, domainEnd]
+      self.domain.clear()
+      self.domain.push(domainStart, domainEnd)
     }
 
     function updateEvents(json: any) {

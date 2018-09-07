@@ -8,7 +8,7 @@ import 'normalize.css'
 import { Provider as ThemeProvider } from 'rebass'
 import theme from './theme'
 
-configure({ enforceActions: true, computedRequiresReaction: true })
+configure({ enforceActions: 'always', computedRequiresReaction: true })
 
 const timelineStore = TimelineStore.create()
 
