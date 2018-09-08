@@ -1,5 +1,6 @@
 import { types, flow } from 'mobx-state-tree'
 import { scaleTime } from 'd3-scale'
+import { timeYear } from 'd3-time'
 // import { GraphQLClient } from 'graphql-request'
 import { extentWithRowPlacement } from '../helpers/time-helpers'
 import Event from './models/Event'
@@ -38,7 +39,7 @@ const timelineStore = types
       },
       scale,
       get ticks() {
-        return scale().ticks(100)
+        return scale().ticks(timeYear)
       },
       get tickFormat() {
         return scale().tickFormat(0, '%Y')

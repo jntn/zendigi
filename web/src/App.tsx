@@ -35,7 +35,6 @@ class App extends React.Component<Props> {
   }
 
   render() {
-    console.log(this.props.timelineStore!.tickFormat)
     return (
       <div>
         <Header />
