@@ -1,0 +1,6 @@
+{
+  "name": "zendigi-api",
+  "features": {
+    "cloud": "v2"
+  }
+}

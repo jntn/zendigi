@@ -26,11 +26,13 @@
     "react-motion": "^0.5.2",
     "react-scripts-ts": "2.17.0",
     "rebass": "^2.1.0",
+    "serve": "^10.0.0",
     "styled-components": "^3.4.5"
   },
   "proxy": "http://localhost:3001",
   "scripts": {
     "dev": "react-scripts-ts start",
+    "start": "serve --single ./build",
     "build": "react-scripts-ts build",
     "test": "react-scripts-ts test --env=jsdom"
   },

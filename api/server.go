@@ -5,28 +5,43 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
 
 	graphqlgo "github.com/graph-gophers/graphql-go"
 	"github.com/graph-gophers/graphql-go/relay"
 	graphql "github.com/jntn/zendigi/api/graphql"
 	"github.com/jntn/zendigi/api/postgres"
+	"github.com/joho/godotenv"
 )
 
 func main() {
 	fmt.Println("Starting zendigi api")
 
-	s, err := getSchema("../../graphql/schema.graphql")
+	err := godotenv.Load()
+	if err != nil {
+		log.Println(" - Not using .env file")
+	}
+
+	conn := os.Getenv("DB_CONN")
+
+	fmt.Println(" - DB: connecting with: " + conn)
+
+	s, err := getSchema("graphql/schema.graphql")
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	conn := "postgres://ufclwwyv:Yl8kyEpGpC9xqz7kyYtYfWX8iTrShrvQ@horton.elephantsql.com:5432/ufclwwyv"
 	db, err := postgres.Open(conn)
-	defer db.Close()
-
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	err = db.Ping()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	defer db.Close()
 
 	us := &postgres.UserService{DB: db}
 
@@ -38,7 +53,7 @@ func main() {
 
 	http.Handle("/query", &relay.Handler{Schema: schema})
 
-	log.Fatal(http.ListenAndServe("localhost:8080", nil))
+	log.Fatal(http.ListenAndServe(":8080", nil))
 }
 
 var page = []byte(`
