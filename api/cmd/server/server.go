@@ -1,4 +1,4 @@
-package main
+package main // import "github.com/jntn/zendigi/api"
 
 import (
 	"fmt"
@@ -26,7 +26,7 @@ func main() {
 
 	fmt.Println(" - DB: connecting with: " + conn)
 
-	s, err := getSchema("graphql/schema.graphql")
+	s, err := getSchema("../../graphql/schema.graphql")
 	if err != nil {
 		log.Fatal(err)
 	}

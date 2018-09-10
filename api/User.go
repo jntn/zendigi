@@ -1,4 +1,4 @@
-package main
+package api
 
 // User describes a user in the system
 type User struct {

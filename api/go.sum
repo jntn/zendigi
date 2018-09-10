@@ -1,0 +1,12 @@
+github.com/graph-gophers/graphql-go v0.0.0-20180806175703-94da0f0031f9 h1:szkPl6mglONCUK9VrQxlzuALNb/JVF5vS/98r+kCDCg=
+github.com/graph-gophers/graphql-go v0.0.0-20180806175703-94da0f0031f9/go.mod h1:aRnZGurV3LlZ1Y+ygyx1mAV6OUfq+nu6OgpJ6jKgZ3g=
+github.com/jntn/zendigi v0.0.0-20180909220627-e33feeba400a h1:eieaoKbmU9fIp9F35bLw3VriT2+lY3UCtwVhvRwL/zg=
+github.com/jntn/zendigi v0.0.0-20180909220627-e33feeba400a/go.mod h1:VOP1U0z1Y5gTPQZ+MZQqFwDtDSi3p+xvP6Y1eJy/qLQ=
+github.com/joho/godotenv v1.2.0 h1:vGTvz69FzUFp+X4/bAkb0j5BoLC+9bpqTWY8mjhA9pc=
+github.com/joho/godotenv v1.2.0/go.mod h1:7hK45KPybAkOC6peb+G5yklZfMxEjkZhHbwpqxOKXbg=
+github.com/lib/pq v1.0.0 h1:X5PMW56eZitiTeO7tKzZxFCSpbFZJtkMMooicw2us9A=
+github.com/lib/pq v1.0.0/go.mod h1:5WUZQaWbwv1U+lTReE5YruASi9Al49XbQIvNi/34Woo=
+github.com/opentracing/opentracing-go v1.0.2 h1:3jA2P6O1F9UOrWVpwrIo17pu01KWvNWg4X946/Y5Zwg=
+github.com/opentracing/opentracing-go v1.0.2/go.mod h1:UkNAQd3GIcIGf0SeVgPpRdFStlNbqXla1AfSYxPUl2o=
+golang.org/x/net v0.0.0-20180906233101-161cd47e91fd h1:nTDtHvHSdCn1m6ITfMRqtOd/9+7a3s8RBNOZ3eYZzJA=
+golang.org/x/net v0.0.0-20180906233101-161cd47e91fd/go.mod h1:mL1N/T3taQHkDXs73rZJwtUhF3w3ftmwwsq0BUmARs4=

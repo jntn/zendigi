@@ -1,0 +1,3 @@
+#!/bin/bash
+
+now -e DB_CONN=@db_conn --public
