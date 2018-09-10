@@ -1,0 +1,12 @@
+{
+  "rules": [
+    {
+      "pathname": "/api/**",
+      "method": ["GET", "POST"],
+      "dest": "zendigi-api.jntn.se/query"
+    },
+    {
+      "dest": "zendigi.jntn.se"
+    }
+  ]
+}
