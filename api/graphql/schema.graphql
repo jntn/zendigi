@@ -12,4 +12,11 @@ type User {
   id: ID
   name: String
   email: String
+  projects: [Project]
+}
+
+type Project {
+  id: ID
+  title: String
+  description: String
 }
