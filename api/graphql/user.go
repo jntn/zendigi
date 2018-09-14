@@ -20,7 +20,7 @@ func (r *Resolver) GetUser(ctx context.Context, args struct{ ID int32 }) (*UserR
 		return nil, err
 	}
 
-	return &UserResolver{u, r.ProjectService}, nil
+	return &UserResolver{User: u, ProjectService: r.ProjectService}, nil
 }
 
 // ID resolves the user ID
@@ -39,12 +39,19 @@ func (u *UserResolver) Email(ctx context.Context) *string {
 }
 
 // Projects resolves the related project for user
-func (u *UserResolver) Projects(ctx context.Context) (*[]*api.Project, error) {
+func (u *UserResolver) Projects(ctx context.Context) (*[]*ProjectResolver, error) {
 	p, err := u.ProjectService.ProjectsByAccountID(u.User.ID)
 
 	if err != nil {
 		return nil, err
 	}
 
-	return p, nil
+	l := make([]*ProjectResolver, len(*p))
+	for i := range l {
+		l[i] = &ProjectResolver{
+			Project: (*p)[i],
+		}
+	}
+
+	return &l, nil
 }

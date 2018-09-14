@@ -31,7 +31,7 @@ func (ps *ProjectService) Project(id int32) (*api.Project, error) {
 
 // ProjectsByAccountID gets projects that belongs to an account
 func (ps *ProjectService) ProjectsByAccountID(accountID int32) (*[]*api.Project, error) {
-	rows, err := ps.DB.Query("SELECT * FROM project WHERE account_id = $1", accountID)
+	rows, err := ps.DB.Query("SELECT id, title, description FROM project WHERE account_id = $1", accountID)
 
 	if err != nil {
 		return nil, err
@@ -39,10 +39,14 @@ func (ps *ProjectService) ProjectsByAccountID(accountID int32) (*[]*api.Project,
 
 	defer rows.Close()
 
-	var projects []api.Project
+	var projects []*api.Project
 	for rows.Next() {
 		project := api.Project{}
 		err := rows.Scan(&project.ID, &project.Title, &project.Description)
+
+		if err != nil {
+			return nil, err
+		}
 
 		projects = append(projects, &project)
 	}

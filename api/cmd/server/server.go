@@ -44,8 +44,9 @@ func main() {
 	defer db.Close()
 
 	us := &postgres.UserService{DB: db}
+	ps := &postgres.ProjectService{DB: db}
 
-	schema := graphqlgo.MustParseSchema(s, &graphql.Resolver{UserService: us})
+	schema := graphqlgo.MustParseSchema(s, &graphql.Resolver{UserService: us, ProjectService: ps})
 
 	http.Handle("/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Write(page)
@@ -53,7 +54,7 @@ func main() {
 
 	http.Handle("/query", &relay.Handler{Schema: schema})
 
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	log.Fatal(http.ListenAndServe(":7000", nil))
 }
 
 var page = []byte(`

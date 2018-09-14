@@ -14,12 +14,12 @@ type ProjectResolver struct {
 
 // GetProject resolves the getProject query
 func (r *Resolver) GetProject(ctx context.Context, args struct{ ID int32 }) (*ProjectResolver, error) {
-	u, err := r.ProjectService.Project(args.ID)
+	p, err := r.ProjectService.Project(args.ID)
 	if err != nil {
 		return nil, err
 	}
 
-	return &ProjectResolver{u}, nil
+	return &ProjectResolver{p}, nil
 }
 
 // ID resolves the user ID
