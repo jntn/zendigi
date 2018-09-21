@@ -1,18 +1,20 @@
 schema {
   query: Query
+  mutation: Mutation
 }
 
-# The query type, represents all of the entry points into our object graph
 type Query {
   getUser(id: ID!): User
   getProject(id: ID!): Project
   getProjectsByAccountId(accountId: ID!): [Project]
+}
+
+type Mutation {
   createProject(title: String!, description: String!, accountId: ID!): ID
   #deleteProject(id: ID!): Boolean
   #updateProject(id: ID!, title: String, description: String): Boolean
 }
 
-# what is needed for a user
 type User {
   id: ID
   name: String

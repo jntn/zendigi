@@ -2,6 +2,7 @@ package postgres
 
 import (
 	"database/sql"
+	"errors"
 	"fmt"
 
 	"github.com/jntn/zendigi/api"
@@ -57,24 +58,16 @@ func (ps *ProjectService) ProjectsByAccountID(accountID int32) (*[]*api.Project,
 
 // CreateProject creates a new project and returns the id
 func (ps *ProjectService) CreateProject(title string, description string, accountID int32) (int32, error) {
-	res, err := ps.DB.Exec(`
+	var id int32
+
+	if len(title) < 1 {
+		return 0, errors.New("Title must be longer than 1 character")
+	}
+
+	err := ps.DB.QueryRow(`
 	INSERT INTO project (title, description, account_id)
-	VALUES ($1, $2, $3)`, title, description, accountID)
-
-	if err != nil {
-		return 0, err
-	}
-
-	count, err := res.RowsAffected()
-	if err != nil {
-		return 0, err
-	}
-
-	if count != 1 {
-		return 0, fmt.Errorf("No project created")
-	}
-
-	id, err := res.LastInsertId()
+	VALUES ($1, $2, $3)
+	RETURNING id`, title, description, accountID).Scan(&id)
 
 	if err != nil {
 		return 0, err
