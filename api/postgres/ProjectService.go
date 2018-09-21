@@ -2,6 +2,7 @@ package postgres
 
 import (
 	"database/sql"
+	"fmt"
 
 	"github.com/jntn/zendigi/api"
 
@@ -52,4 +53,75 @@ func (ps *ProjectService) ProjectsByAccountID(accountID int32) (*[]*api.Project,
 	}
 
 	return &projects, nil
+}
+
+// CreateProject creates a new project and returns the id
+func (ps *ProjectService) CreateProject(title string, description string, accountID int32) (int32, error) {
+	res, err := ps.DB.Exec(`
+	INSERT INTO project (title, description, account_id)
+	VALUES ($1, $2, $3)`, title, description, accountID)
+
+	if err != nil {
+		return 0, err
+	}
+
+	count, err := res.RowsAffected()
+	if err != nil {
+		return 0, err
+	}
+
+	if count != 1 {
+		return 0, fmt.Errorf("No project created")
+	}
+
+	id, err := res.LastInsertId()
+
+	if err != nil {
+		return 0, err
+	}
+
+	return id, nil
+}
+
+// DeleteProject deletes a project
+func (ps *ProjectService) DeleteProject(id int32) error {
+	res, err := ps.DB.Exec("DELETE FROM project WHERE id = $1", id)
+
+	if err != nil {
+		return err
+	}
+
+	count, err := res.RowsAffected()
+	if err != nil {
+		return err
+	}
+
+	if count != 1 {
+		return fmt.Errorf("No project deleted")
+	}
+
+	return nil
+}
+
+// UpdateProject updates a project and returns it
+func (ps *ProjectService) UpdateProject(id int32, title string, description string) error {
+	res, err := ps.DB.Exec(`
+	UPDATE project
+	SET title = $2, description = $3
+	WHERE id = $1`, id, title, description)
+
+	if err != nil {
+		return err
+	}
+
+	count, err := res.RowsAffected()
+	if err != nil {
+		return err
+	}
+
+	if count != 1 {
+		return fmt.Errorf("No project updated")
+	}
+
+	return nil
 }

@@ -1358,7 +1358,7 @@ bser@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/bser/-/bser-2.0.0.tgz#9ac78d3ed5d915804fd87acb158bc797147a1719"
   dependencies:
-    node-int64 "^0.4.0"
+    node-int32 "^0.4.0"
 
 buffer-from@^1.0.0:
   version "1.1.1"
@@ -5058,9 +5058,9 @@ node-forge@0.7.5:
   version "0.7.5"
   resolved "https://registry.yarnpkg.com/node-forge/-/node-forge-0.7.5.tgz#6c152c345ce11c52f465c2abd957e8639cd674df"
 
-node-int64@^0.4.0:
+node-int32@^0.4.0:
   version "0.4.0"
-  resolved "https://registry.yarnpkg.com/node-int64/-/node-int64-0.4.0.tgz#87a9065cdb355d3182d8f94ce11188b825c68a3b"
+  resolved "https://registry.yarnpkg.com/node-int32/-/node-int32-0.4.0.tgz#87a9065cdb355d3182d8f94ce11188b825c68a3b"
 
 node-libs-browser@^2.0.0:
   version "2.1.0"

@@ -22,6 +22,33 @@ func (r *Resolver) GetProject(ctx context.Context, args struct{ ID int32 }) (*Pr
 	return &ProjectResolver{p}, nil
 }
 
+// GetProjectsByAccountID x
+func (r *Resolver) GetProjectsByAccountID(ctx context.Context, args struct{ AccountID int32 }) (*[]*ProjectResolver, error) {
+	ps, err := r.ProjectService.ProjectsByAccountID(args.AccountID)
+	if err != nil {
+		return nil, err
+	}
+
+	var projectResolvers []*ProjectResolver
+
+	for _, p := range *ps {
+		projectResolvers = append(projectResolvers, &ProjectResolver{p})
+	}
+
+	return &projectResolvers, nil
+}
+
+// CreateProject x
+func (r *Resolver) CreateProject(ctx context.Context, args struct {
+	Title       string
+	Description string
+	AccountID   int32
+}) (*graphql.ID, error) {
+	id, err := r.ProjectService.CreateProject(args.Title, args.Description, args.AccountID)
+
+	return gqlIDP(id), err
+}
+
 // ID resolves the user ID
 func (u *ProjectResolver) ID(ctx context.Context) *graphql.ID {
 	return gqlIDP(u.Project.ID)
