@@ -14,9 +14,7 @@ import (
 	"github.com/joho/godotenv"
 )
 
-func main() {
-	fmt.Println("Starting zendigi api")
-
+func prepareShema() *graphqlgo.Schema {
 	err := godotenv.Load()
 	if err != nil {
 		log.Println(" - Not using .env file")
@@ -25,11 +23,6 @@ func main() {
 	conn := os.Getenv("DB_CONN")
 
 	fmt.Println(" - DB: connecting with: " + conn)
-
-	s, err := getSchema("../../graphql/schema.graphql")
-	if err != nil {
-		log.Fatal(err)
-	}
 
 	db, err := postgres.Open(conn)
 	if err != nil {
@@ -41,16 +34,29 @@ func main() {
 		log.Fatal(err)
 	}
 
-	defer db.Close()
+	//defer db.Close()
 
 	us := &postgres.UserService{DB: db}
 	ps := &postgres.ProjectService{DB: db}
 
+	s, err := getSchema("../../graphql/schema.graphql")
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	schema := graphqlgo.MustParseSchema(s, &graphql.Resolver{UserService: us, ProjectService: ps})
+
+	return schema
+}
+
+func main() {
+	fmt.Println("Starting zendigi api")
 
 	http.Handle("/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Write(page)
 	}))
+
+	schema := prepareShema()
 
 	http.Handle("/query", &relay.Handler{Schema: schema})
 
