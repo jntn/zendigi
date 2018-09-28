@@ -2,9 +2,10 @@ package api
 
 // User describes a user in the system
 type User struct {
-	ID    int32
-	Name  string
-	Email string
+	ID       int32
+	Name     string
+	Email    string
+	Password string
 }
 
 // UserService handles CRUD for user
