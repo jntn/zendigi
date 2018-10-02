@@ -23,6 +23,30 @@ func (r *Resolver) GetUser(ctx context.Context, args struct{ ID int32 }) (*UserR
 	return &UserResolver{User: u, ProjectService: r.ProjectService}, nil
 }
 
+// Login hej
+func (r *Resolver) Login(ctx context.Context, args struct {
+	Email    string
+	Password string
+}) (string, error) {
+	t, err := r.UserService.Login(args.Email, args.Password)
+	if err != nil {
+		return "", err
+	}
+
+	return t, nil
+}
+
+// CreateUser hej
+func (r *Resolver) CreateUser(ctx context.Context, args struct {
+	Name     string
+	Email    string
+	Password string
+}) (*graphql.ID, error) {
+	id, err := r.UserService.Create(args.Name, args.Email, args.Password)
+
+	return gqlIDP(id), err
+}
+
 // ID resolves the user ID
 func (u *UserResolver) ID(ctx context.Context) *graphql.ID {
 	return gqlIDP(u.User.ID)
@@ -38,9 +62,22 @@ func (u *UserResolver) Email(ctx context.Context) *string {
 	return &u.User.Email
 }
 
+// Password resolves the Password field for User
+func (u *UserResolver) Password(ctx context.Context) *string {
+	return &u.User.Password
+}
+
 // Projects resolves the related project for user
 func (u *UserResolver) Projects(ctx context.Context) (*[]*ProjectResolver, error) {
-	p, err := u.ProjectService.ProjectsByAccountID(u.User.ID)
+	userID, err := getUserIDFromToken(ctx)
+
+	if err != nil {
+		return nil, err
+	}
+
+	println(userID)
+
+	p, err := u.ProjectService.ProjectsByAccountID(userID)
 
 	if err != nil {
 		return nil, err

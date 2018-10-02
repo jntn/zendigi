@@ -11,4 +11,6 @@ type User struct {
 // UserService handles CRUD for user
 type UserService interface {
 	User(id int32) (*User, error)
+	Login(email string, password string) (string, error)
+	Create(name string, email string, password string) (int32, error)
 }

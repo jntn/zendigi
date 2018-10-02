@@ -7,12 +7,15 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/go-chi/jwtauth"
 	graphqlgo "github.com/graph-gophers/graphql-go"
 	"github.com/graph-gophers/graphql-go/relay"
 	graphql "github.com/jntn/zendigi/api/graphql"
 	"github.com/jntn/zendigi/api/postgres"
 	"github.com/joho/godotenv"
 )
+
+var tokenAuth *jwtauth.JWTAuth
 
 func main() {
 	fmt.Println("Starting zendigi api")
@@ -23,6 +26,7 @@ func main() {
 	}
 
 	conn := os.Getenv("DB_CONN")
+	signingKey := os.Getenv("SIGNING_KEY")
 
 	fmt.Println(" - DB: connecting with: " + conn)
 
@@ -43,7 +47,7 @@ func main() {
 
 	defer db.Close()
 
-	us := &postgres.UserService{DB: db}
+	us := &postgres.UserService{DB: db, SigningKey: []byte(signingKey)}
 	ps := &postgres.ProjectService{DB: db}
 
 	schema := graphqlgo.MustParseSchema(s, &graphql.Resolver{UserService: us, ProjectService: ps})
@@ -51,10 +55,10 @@ func main() {
 	http.Handle("/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Write(page)
 	}))
+	tokenAuth = jwtauth.New("HS256", []byte(signingKey), nil)
+	http.Handle("/query", jwtauth.Verifier(tokenAuth)(&relay.Handler{Schema: schema}))
 
-	http.Handle("/query", &relay.Handler{Schema: schema})
-
-	log.Fatal(http.ListenAndServe(":7000", nil))
+	log.Fatal(http.ListenAndServe(":3001", nil))
 }
 
 var page = []byte(`

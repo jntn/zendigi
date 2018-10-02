@@ -13,7 +13,7 @@ type Mutation {
   createProject(title: String!, description: String!, accountId: ID!): ID
   #deleteProject(id: ID!): Boolean
   #updateProject(id: ID!, title: String, description: String): Boolean
-  login(): String!
+  login(email: String!, password: String!): String!
   createUser(name: String!, email: String!, password: String!): ID
 }
 

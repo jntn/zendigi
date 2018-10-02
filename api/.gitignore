@@ -1,2 +1,3 @@
 cmd/server/server
+cmd/server/gin-bin
 .env
