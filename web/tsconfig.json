@@ -18,6 +18,7 @@
     "downlevelIteration": true,
     "noUnusedLocals": true,
     "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
     "typeRoots": ["./@types", "./node_modules/@types"],
     "baseUrl": "."
   },

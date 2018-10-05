@@ -1,6 +1,13 @@
 {
   "rules": {
-    "variable-name": [true, "allow-pascal-case"]
+    "variable-name": [true, "allow-pascal-case"],
+    "import-name": [
+      true,
+      {
+        "react": "React",
+        "reactDom": "ReactDOM"
+      }
+    ]
   },
   "extends": ["tslint-config-airbnb", "tslint-config-prettier"]
 }
