@@ -19,7 +19,7 @@ class Bar extends React.Component<Props> {
     return (
       <Group
         x={e.start()}
-        y={300 + (barHeight + theme!.space![2]) * e.row}
+        y={(barHeight + theme!.space![2]) * e.row}
         width={e.width()}
       >
         <Rect

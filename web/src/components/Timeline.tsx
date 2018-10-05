@@ -1,8 +1,9 @@
 import * as React from 'react'
 import { inject, observer } from 'mobx-react'
-import { Stage, Layer, Text } from 'react-konva'
+import { Stage, Layer, Text, Group } from 'react-konva'
 import TimelineStore from '../stores/TimelineStore'
 import Bar from './Bar'
+import Flex from './Flex'
 
 interface Props {
   timelineStore?: typeof TimelineStore.Type
@@ -21,20 +22,24 @@ class Timeline extends React.Component<Props> {
     return (
       <Stage width={end} height={window.innerHeight}>
         <Layer>
-          {events.map(x => (
-            <Bar key={x.id} event={x} />
-          ))}
-          {ticks.map(x => (
-            <Text
-              key={x.valueOf()}
-              text={tickFormat(x)}
-              y={9}
-              x={scale()(x)}
-              fill="black"
-              fontFamily="menlo"
-              fontSize={10}
-            />
-          ))}
+          <Flex>
+            <Group>
+              {events.map(x => (
+                <Bar key={x.id} event={x} />
+              ))}
+              {ticks.map(x => (
+                <Text
+                  key={x.valueOf()}
+                  text={tickFormat(x)}
+                  y={9}
+                  x={scale()(x)}
+                  fill="black"
+                  fontFamily="menlo"
+                  fontSize={10}
+                />
+              ))}
+            </Group>
+          </Flex>
         </Layer>
       </Stage>
     )
