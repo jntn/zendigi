@@ -1,6 +1,6 @@
 import { types, flow } from 'mobx-state-tree'
 import { scaleTime } from 'd3-scale'
-import { timeYear } from 'd3-time'
+import { timeYear, timeMonth, timeDay } from 'd3-time'
 // import { GraphQLClient } from 'graphql-request'
 import { extentWithRowPlacement } from '../helpers/time-helpers'
 import Event from './models/Event'
@@ -24,7 +24,8 @@ const timelineStore = types
     start: types.optional(types.number, 0),
     end: types.optional(types.number, 0),
     events: types.optional(types.array(Event), []),
-    domain: types.optional(types.array(types.Date), [new Date(), new Date()])
+    domain: types.optional(types.array(types.Date), [new Date(), new Date()]),
+    zoomLevel: types.optional(types.number, 0)
   })
   .views(self => {
     function scale() {
@@ -38,11 +39,23 @@ const timelineStore = types
         return self.events
       },
       scale,
-      get ticks() {
+      get monthTicks() {
+        return scale().ticks(timeMonth)
+      },
+      get yearTicks() {
         return scale().ticks(timeYear)
       },
-      get tickFormat() {
+      get dayTicks() {
+        return scale().ticks(timeDay)
+      },
+      get yeattickFormat() {
         return scale().tickFormat(0, '%Y')
+      },
+      get monthTickFormat() {
+        return scale().tickFormat(0, '%b')
+      },
+      get dayTickFormat() {
+        return scale().tickFormat(0, '%e')
       }
     }
   })
@@ -79,11 +92,13 @@ const timelineStore = types
         const json = yield fetch('/events.json').then(x => x.json())
         updateEvents(json)
       } catch (err) {
-        console.error('Failed to load books ', err)
+        console.error('Failed to load events', err)
       }
     })
 
     function zoom(transform: any) {
+      self.zoomLevel = transform.k
+
       setDomainToDefault()
       const t = transform.rescaleX(self.scale()).domain()
       self.domain = t
