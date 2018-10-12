@@ -2,11 +2,12 @@ package main // import "github.com/jntn/zendigi/api"
 
 import (
 	"fmt"
-	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
-
+	"database/sql"
+	"github.com/go-chi/chi"
+	"github.com/go-chi/chi/middleware"
 	"github.com/go-chi/jwtauth"
 	graphqlgo "github.com/graph-gophers/graphql-go"
 	"github.com/graph-gophers/graphql-go/relay"
@@ -15,27 +16,24 @@ import (
 	"github.com/joho/godotenv"
 )
 
-var tokenAuth *jwtauth.JWTAuth
+var (
+ tokenAuth *jwtauth.JWTAuth
+ port = ":3001"
+ db *sql.DB
+ signingKey string
+ isTesting bool
+)
 
-func main() {
-	fmt.Println("Starting zendigi api")
-
+func openDatabase () {
 	err := godotenv.Load()
 	if err != nil {
 		log.Println(" - Not using .env file")
 	}
 
 	conn := os.Getenv("DB_CONN")
-	signingKey := os.Getenv("SIGNING_KEY")
+	signingKey = os.Getenv("SIGNING_KEY")
 
-	fmt.Println(" - DB: connecting with: " + conn)
-
-	s, err := getSchema("../../graphql/schema.graphql")
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	db, err := postgres.Open(conn)
+	db, err = postgres.Open(conn)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -44,65 +42,36 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+}
 
+func main() {
+	if !isTesting {
+		// openDatabase()
+	}
 	defer db.Close()
+	fmt.Println("Zendigi api")
+	fmt.Printf("Starting server on %v\n", port)
 
+	log.Fatal(http.ListenAndServe(port, router()))
+}
+
+func router() http.Handler {
 	us := &postgres.UserService{DB: db, SigningKey: []byte(signingKey)}
 	ps := &postgres.ProjectService{DB: db}
 
-	schema := graphqlgo.MustParseSchema(s, &graphql.Resolver{UserService: us, ProjectService: ps})
+	schema := graphqlgo.MustParseSchema(graphql.GetRootSchema(), &graphql.Resolver{UserService: us, ProjectService: ps})
 
-	http.Handle("/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.Write(page)
-	}))
 	tokenAuth = jwtauth.New("HS256", []byte(signingKey), nil)
-	http.Handle("/query", jwtauth.Verifier(tokenAuth)(&relay.Handler{Schema: schema}))
 
-	log.Fatal(http.ListenAndServe(":3001", nil))
-}
+	r := chi.NewRouter()
 
-var page = []byte(`
-<!DOCTYPE html>
-<html>
-	<head>
-		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/graphiql/0.10.2/graphiql.css" />
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/fetch/1.1.0/fetch.min.js"></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.5.4/react.min.js"></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.5.4/react-dom.min.js"></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/graphiql/0.10.2/graphiql.js"></script>
-	</head>
-	<body style="width: 100%; height: 100%; margin: 0; overflow: hidden;">
-		<div id="graphiql" style="height: 100vh;">Loading...</div>
-		<script>
-			function goFetcher(goParams) {
-				return fetch("/query", {
-					method: "post",
-					body: JSON.stringify(goParams),
-					credentials: "include",
-				}).then(function (response) {
-					return response.text();
-				}).then(function (responseBody) {
-					try {
-						return JSON.parse(responseBody);
-					} catch (error) {
-						return responseBody;
-					}
-				});
-			}
-			ReactDOM.render(
-				React.createElement(GraphiQL, {fetcher: goFetcher}),
-				document.getElementById("graphiql")
-			);
-		</script>
-	</body>
-</html>
-`)
+	r.Use(middleware.RequestID)
+	r.Use(middleware.Logger)
+	r.Use(middleware.DefaultCompress)
+	//r.Use(middleware.Recoverer)
+	r.Use(jwtauth.Verifier(tokenAuth))
 
-func getSchema(path string) (string, error) {
-	b, err := ioutil.ReadFile(path)
-	if err != nil {
-		return "", err
-	}
+	r.Post("/query", (&relay.Handler{Schema: schema}).ServeHTTP)
 
-	return string(b), nil
+	return r
 }
