@@ -2,13 +2,12 @@ package postgres
 
 import (
 	"database/sql"
+	"fmt"
 
 	jwt "github.com/dgrijalva/jwt-go"
-	"golang.org/x/crypto/bcrypt"
-
 	"github.com/jntn/zendigi/api"
-	// Import needed for database/sql with postgres
-	_ "github.com/lib/pq"
+	_ "github.com/lib/pq" // Import needed for database/sql with postgres
+	"golang.org/x/crypto/bcrypt"
 )
 
 // Make sure UserService implements api.UserService
@@ -29,9 +28,10 @@ type Claims struct {
 
 // User gets a user by id
 func (us *UserService) User(id int32) (*api.User, error) {
+	fmt.Println(us.DB)
 	var u api.User
 
-	err := us.DB.QueryRow("SELECT id, name, email FROM account WHERE id = $1", id).Scan(&u.ID, &u.Name, &u.Email)
+	err := us.DB.QueryRow(queries["getUser"], id).Scan(&u.ID, &u.Name, &u.Email)
 
 	if err != nil {
 		return nil, err

@@ -13,7 +13,7 @@ require (
 	github.com/graph-gophers/graphql-go v0.0.0-20180806175703-94da0f0031f9
 	github.com/joho/godotenv v1.2.0
 	github.com/lib/pq v1.0.0
-	github.com/nleof/goyesql v1.0.1 // indirect
+	github.com/nleof/goyesql v1.0.1
 	github.com/opencontainers/go-digest v1.0.0-rc1 // indirect
 	github.com/opencontainers/image-spec v1.0.1 // indirect
 	github.com/opencontainers/runc v0.1.1 // indirect

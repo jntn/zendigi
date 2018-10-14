@@ -6,8 +6,6 @@ import (
 	"fmt"
 
 	"github.com/jntn/zendigi/api"
-
-	// Import needen for database/sql with postgres
 	_ "github.com/lib/pq"
 )
 

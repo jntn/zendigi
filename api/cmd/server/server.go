@@ -46,7 +46,7 @@ func openDatabase () {
 
 func main() {
 	if !isTesting {
-		// openDatabase()
+		openDatabase()
 	}
 	defer db.Close()
 	fmt.Println("Zendigi api")
