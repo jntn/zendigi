@@ -75,8 +75,6 @@ func (u *UserResolver) Projects(ctx context.Context) (*[]*ProjectResolver, error
 		return nil, err
 	}
 
-	println(userID)
-
 	p, err := u.ProjectService.ProjectsByAccountID(userID)
 
 	if err != nil {

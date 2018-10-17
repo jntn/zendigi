@@ -11,12 +11,12 @@ import (
 	"os"
 	"testing"
 
+	"github.com/golang-migrate/migrate/v4"
+	"github.com/golang-migrate/migrate/v4/database/postgres"
+	_ "github.com/golang-migrate/migrate/v4/source/file"
 	_ "github.com/lib/pq"
 	"github.com/ory/dockertest"
 	"gopkg.in/testfixtures.v2"
-	"github.com/golang-migrate/migrate/v4"
-    "github.com/golang-migrate/migrate/v4/database/postgres"
-    _ "github.com/golang-migrate/migrate/v4/source/file"
 )
 
 var fixtures *testfixtures.Context
@@ -27,29 +27,42 @@ type data struct {
 	Variables     string `json:"variables,omitempty"`
 }
 
+var testCases = []struct {
+	name     string
+	query    string
+	response string
+}{
+	{"GetUser", "{getUser(id: 1) { name }}", `{"data":{"getUser":{"name":"Jonatan"}}}`},
+	{"GetUser", "{getUser(id: 2) { name }}", `{"data":{"getUser":{"name":"Sanaz"}}}`},
+}
+
 func TestServer(t *testing.T) {
 	prepareTestDatabase()
 
-	dataJSON, err := json.Marshal(data{Query: "{getUser(id: 1) { name }}"})
-	req, err := http.NewRequest("POST", "/query", bytes.NewBuffer(dataJSON))
-	if err != nil {
-		t.Fatal(err)
-	}
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			dataJSON, err := json.Marshal(data{Query: tc.query})
+			req, err := http.NewRequest("POST", "/query", bytes.NewBuffer(dataJSON))
+			if err != nil {
+				t.Fatal(err)
+			}
 
-	rr := httptest.NewRecorder()
-	handler := router()
+			rr := httptest.NewRecorder()
+			handler := router()
 
-	handler.ServeHTTP(rr, req)
+			handler.ServeHTTP(rr, req)
 
-	if status := rr.Code; status != http.StatusOK {
-		t.Errorf("handler returned wrong status code: got %v want %v",
-			status, http.StatusOK)
-	}
+			if status := rr.Code; status != http.StatusOK {
+				t.Errorf("handler returned wrong status code: got %v want %v",
+					status, http.StatusOK)
+			}
 
-	expected := `{"data":{"getUser":{"name":"Jonatan"}}}`
-	if rr.Body.String() != expected {
-		t.Errorf("handler returned unexpected body: got %v want %v",
-			rr.Body.String(), expected)
+			expected := tc.response
+			if rr.Body.String() != expected {
+				t.Errorf("handler returned unexpected body: got %v want %v",
+					rr.Body.String(), expected)
+			}
+		})
 	}
 }
 
@@ -99,29 +112,21 @@ func TestMain(m *testing.M) {
 }
 
 func prepareTestDatabase() {
-	// // FIXME: This has to be done better!
-	// _, err := db.Exec(`
-	// CREATE TABLE account (
-	// 	id serial PRIMARY KEY,
-	// 	name text NOT NULL,
-	// 	email text NOT NULL UNIQUE,
-	// 	password text NOT NULL
-	// );
-	
-	// -- Indices -------------------------------------------------------
-	
-	// CREATE UNIQUE INDEX user_pkey ON account(id int4_ops);
-	// CREATE UNIQUE INDEX account_email ON account(email text_ops);`)
-
-	// if err != nil {
-	// 	log.Fatal(err)
-	// }
-
 	driver, err := postgres.WithInstance(db, &postgres.Config{})
-    m, err := migrate.NewWithDatabaseInstance(
-        "file://migrations",
-        "postgres", driver)
-    m.Up()
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	m, err := migrate.NewWithDatabaseInstance(
+		"file://migrations",
+		"postgres", driver)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	m.Up()
 
 	if err := fixtures.Load(); err != nil {
 		log.Fatal(err)

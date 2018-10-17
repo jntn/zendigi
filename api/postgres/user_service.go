@@ -2,7 +2,6 @@ package postgres
 
 import (
 	"database/sql"
-	"fmt"
 
 	jwt "github.com/dgrijalva/jwt-go"
 	"github.com/jntn/zendigi/api"
@@ -28,7 +27,6 @@ type Claims struct {
 
 // User gets a user by id
 func (us *UserService) User(id int32) (*api.User, error) {
-	fmt.Println(us.DB)
 	var u api.User
 
 	err := us.DB.QueryRow(queries["getUser"], id).Scan(&u.ID, &u.Name, &u.Email)

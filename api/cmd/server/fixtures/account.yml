@@ -2,3 +2,8 @@
   name: Jonatan
   email: hej@jntn.se
   password: p@ssw0rd
+
+- id: 2
+  name: Sanaz
+  email: sanaz@jntn.se
+  password: p@ssw0rd

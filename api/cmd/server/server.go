@@ -66,10 +66,13 @@ func router() http.Handler {
 	r := chi.NewRouter()
 
 	r.Use(middleware.RequestID)
-	r.Use(middleware.Logger)
 	r.Use(middleware.DefaultCompress)
-	//r.Use(middleware.Recoverer)
 	r.Use(jwtauth.Verifier(tokenAuth))
+
+	if !isTesting {
+		r.Use(middleware.Logger)
+		r.Use(middleware.Recoverer)
+	}
 
 	r.Post("/query", (&relay.Handler{Schema: schema}).ServeHTTP)
 
