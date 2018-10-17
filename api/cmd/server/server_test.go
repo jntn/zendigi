@@ -14,6 +14,9 @@ import (
 	_ "github.com/lib/pq"
 	"github.com/ory/dockertest"
 	"gopkg.in/testfixtures.v2"
+	"github.com/golang-migrate/migrate/v4"
+    "github.com/golang-migrate/migrate/v4/database/postgres"
+    _ "github.com/golang-migrate/migrate/v4/source/file"
 )
 
 var fixtures *testfixtures.Context
@@ -96,23 +99,29 @@ func TestMain(m *testing.M) {
 }
 
 func prepareTestDatabase() {
-	// FIXME: This has to be done better!
-	_, err := db.Exec(`
-	CREATE TABLE account (
-		id serial PRIMARY KEY,
-		name text NOT NULL,
-		email text NOT NULL UNIQUE,
-		password text NOT NULL
-	);
+	// // FIXME: This has to be done better!
+	// _, err := db.Exec(`
+	// CREATE TABLE account (
+	// 	id serial PRIMARY KEY,
+	// 	name text NOT NULL,
+	// 	email text NOT NULL UNIQUE,
+	// 	password text NOT NULL
+	// );
 	
-	-- Indices -------------------------------------------------------
+	// -- Indices -------------------------------------------------------
 	
-	CREATE UNIQUE INDEX user_pkey ON account(id int4_ops);
-	CREATE UNIQUE INDEX account_email ON account(email text_ops);`)
+	// CREATE UNIQUE INDEX user_pkey ON account(id int4_ops);
+	// CREATE UNIQUE INDEX account_email ON account(email text_ops);`)
 
-	if err != nil {
-		log.Fatal(err)
-	}
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
+
+	driver, err := postgres.WithInstance(db, &postgres.Config{})
+    m, err := migrate.NewWithDatabaseInstance(
+        "file://migrations",
+        "postgres", driver)
+    m.Up()
 
 	if err := fixtures.Load(); err != nil {
 		log.Fatal(err)
