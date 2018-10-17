@@ -1,0 +1,5 @@
+{
+  "schemaPath": "./graphql/schema.graphql",
+  "includes": ["*.graphql"],
+  "extensions": { "endpoints": { "local": "http://localhost:3001/query" } },
+}
