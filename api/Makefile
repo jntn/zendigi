@@ -11,5 +11,4 @@ generate:
 generate-debug:
 	go-bindata -debug ./...
 
-
 .PHONY: test build run
