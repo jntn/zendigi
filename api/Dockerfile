@@ -1,13 +1,16 @@
 FROM golang:latest as base
-WORKDIR /usr/src
+WORKDIR /jntn/src
+RUN export PATH=$PATH:$GOPATH/bin
+RUN go get -u github.com/go-bindata/go-bindata/...
+COPY go.mod .
+RUN go get -u
 COPY . .
-WORKDIR /usr/src/cmd/server
-RUN go get -d -v && CGO_ENABLED=0 go build -ldflags "-s -w" -o /usr/src/server
+RUN make generate && make build
 
 FROM scratch
 ARG DB_CONN=unset
 ENV DB_CONN=$DB_CONN
-COPY --from=base /usr/src/server /cmd/api/server
-COPY --from=base /usr/src/graphql/schema.graphql /graphql/schema.graphql
-EXPOSE 8080
-CMD ["/cmd/api/server"]
+WORKDIR /app
+COPY --from=base /jntn/src/server /app/
+ENTRYPOINT ["./server"]
+EXPOSE 3001

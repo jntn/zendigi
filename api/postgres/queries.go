@@ -1,4 +1,4 @@
-//go:generate go-bindata -ignore=\.go -pkg=postgres -o=bindata.go queries/...
+//go:generate go-bindata -ignore=\.go -pkg=postgres queries/...
 package postgres
 
 import (
@@ -7,7 +7,11 @@ import (
 	"github.com/nleof/goyesql"
 )
 
-var queries = goyesql.MustParseBytes(GetQueries())
+var queries goyesql.Queries
+
+func init() {
+	queries = goyesql.MustParseBytes(GetQueries())
+}
 
 // GetQueries gets the graphql schema
 func GetQueries() []byte {

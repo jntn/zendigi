@@ -4,35 +4,40 @@
 package graphql
 
 import (
-	"bytes"
-	"compress/gzip"
 	"fmt"
-	"io"
 	"io/ioutil"
+	"log"
 	"os"
 	"path/filepath"
 	"strings"
-	"time"
+
+	"github.com/joho/godotenv"
 )
 
-func bindataRead(data []byte, name string) ([]byte, error) {
-	gz, err := gzip.NewReader(bytes.NewBuffer(data))
+var rootDir string
+
+func init() {
+	err := godotenv.Load()
 	if err != nil {
-		return nil, fmt.Errorf("Read %q: %v", name, err)
+		log.Fatalln("Could not load .env file")
 	}
 
-	var buf bytes.Buffer
-	_, err = io.Copy(&buf, gz)
-	clErr := gz.Close()
+	rootDir = os.Getenv("ROOT_DIR")
 
+	if rootDir == "" {
+		log.Fatalln("Environment variable ROOT_DIR missing, please add to .env file")
+	}
+
+	rootDir = rootDir + "/graphql/"
+}
+
+// bindataRead reads the given file from disk. It returns an error on failure.
+func bindataRead(path, name string) ([]byte, error) {
+	buf, err := ioutil.ReadFile(path)
 	if err != nil {
-		return nil, fmt.Errorf("Read %q: %v", name, err)
+		err = fmt.Errorf("Error reading asset %s at %s: %v", name, path, err)
 	}
-	if clErr != nil {
-		return nil, err
-	}
-
-	return buf.Bytes(), nil
+	return buf, err
 }
 
 type asset struct {
@@ -40,50 +45,22 @@ type asset struct {
 	info  os.FileInfo
 }
 
-type bindataFileInfo struct {
-	name    string
-	size    int64
-	mode    os.FileMode
-	modTime time.Time
-}
-
-func (fi bindataFileInfo) Name() string {
-	return fi.name
-}
-func (fi bindataFileInfo) Size() int64 {
-	return fi.size
-}
-func (fi bindataFileInfo) Mode() os.FileMode {
-	return fi.mode
-}
-func (fi bindataFileInfo) ModTime() time.Time {
-	return fi.modTime
-}
-func (fi bindataFileInfo) IsDir() bool {
-	return false
-}
-func (fi bindataFileInfo) Sys() interface{} {
-	return nil
-}
-
-var _schemaGraphql = []byte("\x1f\x8b\x08\x00\x00\x00\x00\x00\x00\xff\x8c\x51\xb1\x6a\xc4\x30\x0c\xdd\xf5\x15\x3a\xba\xe4\xe0\xbe\x20\x5b\x8f\x2c\x19\x0a\x2d\xa5\x53\xe9\x60\x6c\x91\xba\x38\x76\x6a\x2b\x94\x50\xee\xdf\x8b\x13\xc7\x17\x93\x0c\x9d\xa2\x3c\xc9\xef\x3d\x3d\x05\xf9\x49\xbd\xc0\x5f\x40\xfc\x1e\xc9\x4f\x35\xbe\xc4\x0f\x20\xf6\x23\x0b\xd6\xce\xd6\xf8\x94\x2a\xb8\x01\xf0\x34\xd0\x32\x32\xbf\xe9\x88\xdf\x02\xf9\x4a\xab\x1a\xdb\xe6\x74\xae\x31\xfe\x2e\x8d\x67\xef\xbe\x48\xf2\xa6\x97\x90\xa2\x1d\xae\xd3\xa3\x94\x6e\xb4\xdc\xaa\x4a\xac\xd5\xfa\xe2\x3d\x4d\x7d\x64\xed\xd5\xcc\x2c\x2f\x3d\x09\xa6\x55\x88\x35\x1b\xaa\xf1\x95\xbd\xb6\xdd\xe9\x82\x8a\x82\xf4\x7a\x58\x96\xc8\xe8\x4e\xa3\x6d\x00\xf1\x41\x91\xa1\x3b\xd5\xdd\xf3\xd5\x39\x43\xc2\xc6\x91\x71\x50\x62\x37\x72\xc1\x42\xf6\x50\xb5\xa0\x31\xae\xd3\xb6\xa2\x5e\x68\xb3\x71\x35\x88\x10\x7e\x9c\x57\x19\x3a\xe7\x2a\xef\x39\x27\x6d\x45\xbf\xdd\xf1\x3f\x3c\x6d\x93\xd3\x8b\x14\x73\x72\x8b\x7b\x40\xdc\xf2\x01\x96\x7c\x80\x3b\xbe\x08\xa5\xc3\x1d\x5d\x27\x01\xa5\x44\x11\x10\xe0\x51\x42\x70\x83\xbf\x00\x00\x00\xff\xff\x5e\xbf\x2e\x0b\x8a\x02\x00\x00")
-
-func schemaGraphqlBytes() ([]byte, error) {
-	return bindataRead(
-		_schemaGraphql,
-		"schema.graphql",
-	)
-}
-
+// schemaGraphql reads file data from disk. It returns an error on failure.
 func schemaGraphql() (*asset, error) {
-	bytes, err := schemaGraphqlBytes()
+	path := filepath.Join(rootDir, "schema.graphql")
+	name := "schema.graphql"
+	bytes, err := bindataRead(path, name)
 	if err != nil {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "schema.graphql", size: 650, mode: os.FileMode(420), modTime: time.Unix(1538164090, 0)}
-	a := &asset{bytes: bytes, info: info}
-	return a, nil
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
 }
 
 // Asset loads and returns the asset for the given name.
@@ -180,6 +157,7 @@ type bintree struct {
 	Func     func() (*asset, error)
 	Children map[string]*bintree
 }
+
 var _bintree = &bintree{nil, map[string]*bintree{
 	"schema.graphql": &bintree{schemaGraphql, map[string]*bintree{}},
 }}
@@ -230,4 +208,3 @@ func _filePath(dir, name string) string {
 	cannonicalName := strings.Replace(name, "\\", "/", -1)
 	return filepath.Join(append([]string{dir}, strings.Split(cannonicalName, "/")...)...)
 }
-
