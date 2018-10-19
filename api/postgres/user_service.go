@@ -42,7 +42,7 @@ func (us *UserService) User(id int32) (*api.User, error) {
 func (us *UserService) Create(name string, email string, password string) (int32, error) {
 	var id int32
 
-	passwordHash, err := bcrypt.GenerateFromPassword([]byte(password), 15)
+	passwordHash, err := bcrypt.GenerateFromPassword([]byte(password), 12)
 
 	if err != nil {
 		return 0, err

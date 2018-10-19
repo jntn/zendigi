@@ -42,9 +42,18 @@ func (r *Resolver) GetProjectsByAccountID(ctx context.Context, args struct{ Acco
 func (r *Resolver) CreateProject(ctx context.Context, args struct {
 	Title       string
 	Description string
-	AccountID   int32
 }) (*graphql.ID, error) {
-	id, err := r.ProjectService.CreateProject(args.Title, args.Description, args.AccountID)
+	userID, err := getUserIDFromToken(ctx)
+
+	if err != nil {
+		return nil, err
+	}
+
+	id, err := r.ProjectService.CreateProject(args.Title, args.Description, userID)
+
+	if err != nil {
+		return nil, err
+	}
 
 	return gqlIDP(id), err
 }

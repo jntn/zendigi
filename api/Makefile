@@ -1,7 +1,7 @@
 all: build
 
 test:
-	go test ./cmd/server/
+	@go test ./cmd/server/
 build:
 	@CGO_ENABLED=0 go build -ldflags "-s -w" ./cmd/server/server.go
 run:

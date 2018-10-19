@@ -16,10 +16,11 @@ import (
 	_ "github.com/golang-migrate/migrate/v4/source/file"
 	_ "github.com/lib/pq"
 	"github.com/ory/dockertest"
-	"gopkg.in/testfixtures.v2"
+	//"gopkg.in/testfixtures.v2"
 )
 
-var fixtures *testfixtures.Context
+// var fixtures *testfixtures.Context
+var jwtToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoidXNlciIsInVzZXJJZCI6MSwiaXNzIjoiemVuZGlnaSJ9.efym-vzeACdvovHFSwhoybaDx5mkibyedalYbwaNbXM"
 
 type data struct {
 	OperationName string `json:"operationname,omitempty"`
@@ -32,8 +33,11 @@ var testCases = []struct {
 	query    string
 	response string
 }{
-	{"GetUser", "{getUser(id: 1) { name }}", `{"data":{"getUser":{"name":"Jonatan"}}}`},
-	{"GetUser", "{getUser(id: 2) { name }}", `{"data":{"getUser":{"name":"Sanaz"}}}`},
+	{"CreateUser", `mutation {createUser(name: "Jonatan", email: "hej@hej", password: "test")}`, `{"data":{"createUser":"1"}}`},
+	{"LoginUser", `mutation {login(email: "hej@hej", password: "test")}`, `{"data":{"login":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoidXNlciIsInVzZXJJZCI6MSwiaXNzIjoiemVuZGlnaSJ9.efym-vzeACdvovHFSwhoybaDx5mkibyedalYbwaNbXM"}}`},
+	{"GetUser", "query {getUser(id: 1) {name projects {title}}}", `{"data":{"getUser":{"name":"Jonatan","projects":[]}}}`},
+	{"AddProject", `mutation {createProject(title: "Life", description: "My life")}`, `{"data":{"createProject":"1"}}`},
+	{"GetUser", "query {getUser(id: 1) {name projects {title}}}", `{"data":{"getUser":{"name":"Jonatan","projects":[{"title":"Life"}]}}}`},
 }
 
 func TestServer(t *testing.T) {
@@ -42,7 +46,11 @@ func TestServer(t *testing.T) {
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
 			dataJSON, err := json.Marshal(data{Query: tc.query})
+			// fmt.Println(string(dataJSON[:]))
 			req, err := http.NewRequest("POST", "/query", bytes.NewBuffer(dataJSON))
+
+			req.Header.Set("Authorization", "bearer "+jwtToken)
+
 			if err != nil {
 				t.Fatal(err)
 			}
@@ -94,13 +102,13 @@ func TestMain(m *testing.M) {
 		log.Fatalf("Could not connect to docker: %s", err)
 	}
 
-	fixtures, err = testfixtures.NewFiles(db, &testfixtures.PostgreSQL{UseAlterConstraint: true},
-		"fixtures/account.yml",
-	)
+	// fixtures, err = testfixtures.NewFiles(db, &testfixtures.PostgreSQL{UseAlterConstraint: true},
+	// 	"fixtures/account.yml",
+	// )
 
-	if err != nil {
-		log.Fatal(err)
-	}
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
 
 	exitCode := m.Run()
 
@@ -128,7 +136,7 @@ func prepareTestDatabase() {
 
 	m.Up()
 
-	if err := fixtures.Load(); err != nil {
-		log.Fatal(err)
-	}
+	// if err := fixtures.Load(); err != nil {
+	// 	log.Fatal(err)
+	// }
 }
