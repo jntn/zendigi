@@ -26,9 +26,6 @@ var (
 
 func openDatabase () {
 	err := godotenv.Load()
-	if err != nil {
-		log.Println(" - Not using .env file")
-	}
 
 	conn := os.Getenv("DB_CONN")
 	signingKey = os.Getenv("SIGNING_KEY")
@@ -49,10 +46,13 @@ func main() {
 		openDatabase()
 	}
 	defer db.Close()
-	fmt.Println("Zendigi api")
-	fmt.Printf("Starting server on %v\n", port)
+	fmt.Println("\n🚀 Zendigi API")
+	fmt.Println("--------------")
+	fmt.Printf("  * Starting server on %v\n\n", port)
 
 	log.Fatal(http.ListenAndServe(port, router()))
+
+	log.Println("Shut down.")
 }
 
 func router() http.Handler {

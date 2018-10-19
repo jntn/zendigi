@@ -1,5 +1,5 @@
 // Package graphql handles the details of GraphQL
-//go:generate go-bindata -ignore=\.go -pkg=graphql -o=bindata.go ./...
+//go:generate go-bindata -ignore=\.go -pkg=graphql ./...
 package graphql
 
 import (

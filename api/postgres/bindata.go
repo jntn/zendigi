@@ -4,35 +4,42 @@
 package postgres
 
 import (
-	"bytes"
-	"compress/gzip"
 	"fmt"
-	"io"
 	"io/ioutil"
+	"log"
 	"os"
 	"path/filepath"
 	"strings"
-	"time"
+
+	"github.com/joho/godotenv"
 )
 
-func bindataRead(data []byte, name string) ([]byte, error) {
-	gz, err := gzip.NewReader(bytes.NewBuffer(data))
+var rootDir string
+
+func init() {
+	err := godotenv.Load()
 	if err != nil {
-		return nil, fmt.Errorf("Read %q: %v", name, err)
+		log.Fatalln("Could not load .env file")
 	}
 
-	var buf bytes.Buffer
-	_, err = io.Copy(&buf, gz)
-	clErr := gz.Close()
+	rootDir = os.Getenv("ROOT_DIR")
 
+	if rootDir == "" {
+		log.Fatalln("Environment variable ROOT_DIR missing, please add to .env file")
+	}
+
+	log.Println("rootdir" + rootDir)
+
+	rootDir = rootDir + "/postgres/"
+}
+
+// bindataRead reads the given file from disk. It returns an error on failure.
+func bindataRead(path, name string) ([]byte, error) {
+	buf, err := ioutil.ReadFile(path)
 	if err != nil {
-		return nil, fmt.Errorf("Read %q: %v", name, err)
+		err = fmt.Errorf("Error reading asset %s at %s: %v", name, path, err)
 	}
-	if clErr != nil {
-		return nil, err
-	}
-
-	return buf.Bytes(), nil
+	return buf, err
 }
 
 type asset struct {
@@ -40,50 +47,22 @@ type asset struct {
 	info  os.FileInfo
 }
 
-type bindataFileInfo struct {
-	name    string
-	size    int64
-	mode    os.FileMode
-	modTime time.Time
-}
-
-func (fi bindataFileInfo) Name() string {
-	return fi.name
-}
-func (fi bindataFileInfo) Size() int64 {
-	return fi.size
-}
-func (fi bindataFileInfo) Mode() os.FileMode {
-	return fi.mode
-}
-func (fi bindataFileInfo) ModTime() time.Time {
-	return fi.modTime
-}
-func (fi bindataFileInfo) IsDir() bool {
-	return false
-}
-func (fi bindataFileInfo) Sys() interface{} {
-	return nil
-}
-
-var _queriesUserSql = []byte("\x1f\x8b\x08\x00\x00\x00\x00\x00\x00\xff\xd2\xd5\x55\xc8\x4b\xcc\x4d\xb5\x52\x48\x4f\x2d\x09\x2d\x4e\x2d\xe2\x0a\x76\xf5\x71\x75\x0e\x51\xc8\x4c\xd1\x01\x4b\xe8\x28\xa4\xe6\x26\x66\xe6\x28\xb8\x05\xf9\xfb\x2a\x24\x26\x27\xe7\x97\xe6\x95\x28\x84\x7b\xb8\x06\xb9\x2a\x64\xa6\x28\xd8\x2a\xa8\x18\x02\x02\x00\x00\xff\xff\xaa\xce\x78\x6a\x42\x00\x00\x00")
-
-func queriesUserSqlBytes() ([]byte, error) {
-	return bindataRead(
-		_queriesUserSql,
-		"queries/user.sql",
-	)
-}
-
+// queriesUserSql reads file data from disk. It returns an error on failure.
 func queriesUserSql() (*asset, error) {
-	bytes, err := queriesUserSqlBytes()
+	path := filepath.Join(rootDir, "queries/user.sql")
+	name := "queries/user.sql"
+	bytes, err := bindataRead(path, name)
 	if err != nil {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "queries/user.sql", size: 66, mode: os.FileMode(420), modTime: time.Unix(1539369334, 0)}
-	a := &asset{bytes: bytes, info: info}
-	return a, nil
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
 }
 
 // Asset loads and returns the asset for the given name.
@@ -180,6 +159,7 @@ type bintree struct {
 	Func     func() (*asset, error)
 	Children map[string]*bintree
 }
+
 var _bintree = &bintree{nil, map[string]*bintree{
 	"queries": &bintree{nil, map[string]*bintree{
 		"user.sql": &bintree{queriesUserSql, map[string]*bintree{}},
@@ -232,4 +212,3 @@ func _filePath(dir, name string) string {
 	cannonicalName := strings.Replace(name, "\\", "/", -1)
 	return filepath.Join(append([]string{dir}, strings.Split(cannonicalName, "/")...)...)
 }
-
