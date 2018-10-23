@@ -3,7 +3,9 @@ all: build
 test:
 	@go test ./cmd/server/
 build:
-	@CGO_ENABLED=0 go build -ldflags "-s -w" ./cmd/server/server.go
+	@CGO_ENABLED=0 go build -ldflags "-s -w" ./cmd/server/server.
+build-vendor:
+	@CGO_ENABLED=0 go build -mod=vendor -ldflags "-s -w" ./cmd/server/server. 
 run:
 	@cd cmd/server && go run server.go
 generate:
