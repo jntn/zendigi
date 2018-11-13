@@ -1,4 +1,5 @@
 import * as React from 'react'
+import { createRef } from 'react'
 import { inject, observer } from 'mobx-react'
 import { zoom, ZoomBehavior } from 'd3-zoom'
 import { event, select } from 'd3-selection'
@@ -16,14 +17,14 @@ interface Props {
 @inject('timelineStore')
 @observer
 class App extends React.Component<Props> {
-  private app: HTMLDivElement
-  private zoom: ZoomBehavior<Element, {}>
+  private app = createRef<HTMLDivElement>()
+  private zoom: ZoomBehavior<HTMLDivElement, {}>
 
   constructor(props: Props) {
     super(props)
     this.props.timelineStore!.loadEvents()
 
-    this.zoom = zoom().on('zoom', this.zoomed.bind(this))
+    this.zoom = zoom<HTMLDivElement, {}>().on('zoom', this.zoomed.bind(this))
   }
 
   zoomed() {
@@ -37,8 +38,10 @@ class App extends React.Component<Props> {
   }
 
   componentDidMount() {
-    this.props.timelineStore!.setWidth(this.app.clientWidth)
-    select(this.app).call(this.zoom)
+    if (this.app.current) {
+      this.props.timelineStore!.setWidth(this.app.current.clientWidth)
+      select(this.app.current).call(this.zoom)
+    }
   }
 
   render() {
@@ -46,7 +49,7 @@ class App extends React.Component<Props> {
       <div>
         <Header />
         <Box p={2}>
-          <div ref={app => (this.app = app!)}>
+          <div ref={this.app}>
             <Timeline />
           </div>
         </Box>

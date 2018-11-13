@@ -22,17 +22,17 @@
     "react-dom": "^16.5.2",
     "react-konva": "^1.7.15",
     "react-motion": "^0.5.2",
-    "react-scripts-ts": "3.1.0",
+    "react-scripts": "^2.1.1",
     "rebass": "^2.3.4",
     "serve": "^10.0.2",
     "styled-components": "^3.4.9"
   },
   "proxy": "http://localhost:3001",
   "scripts": {
-    "dev": "react-scripts-ts start",
+    "dev": "react-scripts start",
     "start": "serve --single ./build",
-    "build": "react-scripts-ts build",
-    "test": "react-scripts-ts test --env=jsdom"
+    "build": "react-scripts build",
+    "test": "react-scripts test"
   },
   "devDependencies": {
     "@types/d3-scale": "^2.0.2",
@@ -51,5 +51,11 @@
     "tslint-config-airbnb": "^5.11.0",
     "tslint-config-prettier": "^1.15.0",
     "typescript": "^3.1.1"
-  }
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
 }
