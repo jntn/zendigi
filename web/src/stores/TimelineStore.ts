@@ -48,7 +48,7 @@ const timelineStore = types
       get dayTicks() {
         return scale().ticks(timeDay)
       },
-      get yeattickFormat() {
+      get yearTickFormat() {
         return scale().tickFormat(0, '%Y')
       },
       get monthTickFormat() {
