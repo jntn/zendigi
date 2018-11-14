@@ -3,7 +3,6 @@ import { createRef } from 'react'
 import { inject, observer } from 'mobx-react'
 import { zoom, ZoomBehavior } from 'd3-zoom'
 import { event, select } from 'd3-selection'
-import { Box } from 'rebass'
 // import lodashDebounce from 'lodash.debounce'
 
 import TimelineStore from './stores/TimelineStore'
@@ -48,11 +47,11 @@ class App extends React.Component<Props> {
     return (
       <div>
         <Header />
-        <Box p={2}>
+        <div>
           <div ref={this.app}>
             <Timeline />
           </div>
-        </Box>
+        </div>
       </div>
     )
   }

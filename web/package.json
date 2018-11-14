@@ -23,6 +23,8 @@
     "react-konva": "^1.7.15",
     "react-motion": "^0.5.2",
     "react-scripts": "^2.1.1",
+    "reakit": "^0.15.11",
+    "reakit-theme-default": "^0.1.12",
     "rebass": "^2.3.4",
     "serve": "^10.0.2",
     "styled-components": "^3.4.9"

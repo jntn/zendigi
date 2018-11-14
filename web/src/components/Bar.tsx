@@ -1,31 +1,24 @@
 import * as React from 'react'
 import { observer } from 'mobx-react'
-import { withTheme } from 'styled-components'
 import { Group, Rect, Text } from 'react-konva'
 import Event from '../stores/models/Event'
-import { Theme } from 'rebass'
 
 const barHeight = 30
 
 interface Props {
   event: typeof Event.Type
-  theme?: Theme
 }
 
 @observer
 class Bar extends React.Component<Props> {
   render() {
-    const { event: e, theme } = this.props
+    const { event: e } = this.props
     return (
-      <Group
-        x={e.start()}
-        y={300 + (barHeight + theme!.space![2]) * e.row}
-        width={e.width()}
-      >
+      <Group x={e.start()} y={300 + (barHeight + 8) * e.row} width={e.width()}>
         <Rect
           width={e.width()}
           height={32}
-          fill={theme!.colors!.teal}
+          fill="palevioletred"
           cornerRadius={15}
         />
         <Text
@@ -34,11 +27,11 @@ class Bar extends React.Component<Props> {
           x={10}
           fill="white"
           fontFamily="menlo"
-          fontSize={theme!.fontSizes![1]}
+          fontSize={14}
         />
       </Group>
     )
   }
 }
 
-export default withTheme(Bar)
+export default Bar
