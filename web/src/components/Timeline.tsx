@@ -24,9 +24,6 @@ class Ticks extends Component<Props2> {
     const yearTickFormat = this.props.timelineStore!.yearTickFormat
     const scale = this.props.timelineStore!.scale()
 
-    // console.log(zoomLevel)
-    // console.log(yearTicks)
-
     return (
       <Group>
         {zoomLevel > 108 &&
@@ -41,7 +38,7 @@ class Ticks extends Component<Props2> {
               fontSize={10}
             />
           ))}
-        {zoomLevel > 0.56 &&
+        {(zoomLevel === 0 || zoomLevel > 0.56) &&
           yearTicks.map(x => (
             <Text
               key={x.valueOf()}
