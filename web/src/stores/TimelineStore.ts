@@ -25,7 +25,7 @@ const timelineStore = types
     end: types.optional(types.number, 0),
     events: types.optional(types.array(Event), []),
     domain: types.optional(types.array(types.Date), [new Date(), new Date()]),
-    zoomLevel: types.optional(types.number, 0)
+    zoomLevel: types.optional(types.number, 1)
   })
   .views(self => {
     function scale() {

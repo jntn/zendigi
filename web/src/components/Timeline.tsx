@@ -38,7 +38,7 @@ class Ticks extends Component<Props2> {
               fontSize={10}
             />
           ))}
-        {(zoomLevel === 0 || zoomLevel > 0.56) &&
+        {zoomLevel > 0.56 &&
           yearTicks.map(x => (
             <Text
               key={x.valueOf()}
