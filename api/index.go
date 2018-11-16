@@ -1,7 +1,7 @@
 package main
 
 import (
-	"fmt"
+	//"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -41,22 +41,23 @@ func openDatabase () {
 	}
 }
 
-func main() {
-	if !isTesting {
-		openDatabase()
-	}
-	defer db.Close()
-	fmt.Println("\n🚀 Zendigi API")
-	fmt.Println("--------------")
-	fmt.Printf("  * Starting server on %v\n\n", port)
+// func main() {
+// 	if !isTesting {
+// 		openDatabase()
+// 	}
+// 	defer db.Close()
+// 	fmt.Println("\n🚀 Zendigi API")
+// 	fmt.Println("--------------")
+// 	fmt.Printf("  * Starting server on %v\n\n", port)
 
-	log.Fatal(http.ListenAndServe(port, router()))
+// 	log.Fatal(http.ListenAndServe(port, router()))
 
-	log.Println("Shut down.")
-}
+// 	log.Println("Shut down.")
+// }
 
 // Handler is the entrypoint for now
 func Handler(w http.ResponseWriter, r *http.Request) {
+	//fmt.Fprintf(w, "Hello from Go on Now 2.0!")
 	openDatabase()
 
 	us := &postgres.UserService{DB: db, SigningKey: []byte(signingKey)}

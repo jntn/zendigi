@@ -1,9 +1,19 @@
 {
     "version": 2,
+    "name": "zendigi-api",
     "builds": [
         {
-            "src": "server.go",
-            "use": "@now/go"
+            "src": "index.go",
+            "use": "@now/go",
+            "config": {
+                "maxLambdaSize": "10mb"
+            }
+        }
+    ],
+    "routes": [
+        {
+            "src": "/query",
+            "dest": "/index.go"
         }
     ]
 }
