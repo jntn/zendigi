@@ -1,0 +1,19 @@
+{
+    "version": 2,
+    "builds": [
+        {
+            "src": "web/package.json",
+            "use": "@now/static-build"
+        },
+        {
+            "src": "api/server.go",
+            "use": "@now/go"
+        }
+    ],
+    "routes": [
+        {
+            "src": "^/static/(.*)",
+            "dest": "/static/$1"
+        }
+    ]
+}

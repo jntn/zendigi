@@ -5,11 +5,11 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/jntn/zendigi/api"
+	domain "github.com/jntn/zendigi/domain"
 	_ "github.com/lib/pq"
 )
 
-var _ api.ProjectService = &ProjectService{}
+var _ domain.ProjectService = &ProjectService{}
 
 // ProjectService postgres implementation
 type ProjectService struct {
@@ -17,8 +17,8 @@ type ProjectService struct {
 }
 
 // Project gets a project by id
-func (ps *ProjectService) Project(id int32) (*api.Project, error) {
-	var p api.Project
+func (ps *ProjectService) Project(id int32) (*domain.Project, error) {
+	var p domain.Project
 
 	err := ps.DB.QueryRow("SELECT * FROM project WHERE id = $1", id).Scan(&p.ID, &p.Title, &p.Description)
 
@@ -30,7 +30,7 @@ func (ps *ProjectService) Project(id int32) (*api.Project, error) {
 }
 
 // ProjectsByAccountID gets projects that belongs to an account
-func (ps *ProjectService) ProjectsByAccountID(accountID int32) (*[]*api.Project, error) {
+func (ps *ProjectService) ProjectsByAccountID(accountID int32) (*[]*domain.Project, error) {
 	rows, err := ps.DB.Query("SELECT id, title, description FROM project WHERE account_id = $1", accountID)
 
 	if err != nil {
@@ -39,9 +39,9 @@ func (ps *ProjectService) ProjectsByAccountID(accountID int32) (*[]*api.Project,
 
 	defer rows.Close()
 
-	var projects []*api.Project
+	var projects []*domain.Project
 	for rows.Next() {
-		project := api.Project{}
+		project := domain.Project{}
 		err := rows.Scan(&project.ID, &project.Title, &project.Description)
 
 		if err != nil {

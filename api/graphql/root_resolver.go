@@ -1,10 +1,12 @@
 package graphql
 
-import "github.com/jntn/zendigi/api"
+import (
+	domain "github.com/jntn/zendigi/api/domain"
+)
 
 // Resolver is the root resolver
 type Resolver struct {
-	UserService    api.UserService
-	ProjectService api.ProjectService
+	UserService    domain.UserService
+	ProjectService domain.ProjectService
 	JwtSecret      []byte
 }

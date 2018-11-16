@@ -1,7 +1,7 @@
 all: build
 
 test:
-	@go test ./cmd/server/
+	@go test
 build:
 	@CGO_ENABLED=0 go build -ldflags "-s -w" ./cmd/server/server.
 build-vendor:

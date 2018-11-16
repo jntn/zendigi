@@ -1,4 +1,4 @@
-package api
+package models
 
 // Project describes a project in the system
 type Project struct {

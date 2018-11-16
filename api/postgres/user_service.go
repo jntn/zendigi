@@ -4,13 +4,13 @@ import (
 	"database/sql"
 
 	jwt "github.com/dgrijalva/jwt-go"
-	"github.com/jntn/zendigi/api"
+	domain "github.com/jntn/zendigi/domain"
 	_ "github.com/lib/pq" // Import needed for database/sql with postgres
 	"golang.org/x/crypto/bcrypt"
 )
 
-// Make sure UserService implements api.UserService
-var _ api.UserService = &UserService{}
+// Make sure UserService implements domain.UserService
+var _ domain.UserService = &UserService{}
 
 // UserService postgres implementation
 type UserService struct {
@@ -26,8 +26,8 @@ type Claims struct {
 }
 
 // User gets a user by id
-func (us *UserService) User(id int32) (*api.User, error) {
-	var u api.User
+func (us *UserService) User(id int32) (*domain.User, error) {
+	var u domain.User
 
 	err := us.DB.QueryRow(queries["getUser"], id).Scan(&u.ID, &u.Name, &u.Email)
 
@@ -63,7 +63,7 @@ func (us *UserService) Create(name string, email string, password string) (int32
 // Login logs in a user
 func (us *UserService) Login(email string, password string) (string, error) {
 
-	var u api.User
+	var u domain.User
 
 	err := us.DB.QueryRow("SELECT * FROM account WHERE email = $1", email).Scan(&u.ID, &u.Name, &u.Email, &u.Password)
 

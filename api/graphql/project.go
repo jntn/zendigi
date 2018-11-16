@@ -4,12 +4,12 @@ import (
 	"context"
 
 	graphql "github.com/graph-gophers/graphql-go"
-	"github.com/jntn/zendigi/api"
+	domain "github.com/jntn/zendigi/api/domain"
 )
 
 // ProjectResolver resolves the Project type
 type ProjectResolver struct {
-	Project *api.Project
+	Project *domain.Project
 }
 
 // GetProject resolves the getProject query

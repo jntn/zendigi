@@ -4,13 +4,13 @@ import (
 	"context"
 
 	graphql "github.com/graph-gophers/graphql-go"
-	"github.com/jntn/zendigi/api"
+	domain "github.com/jntn/zendigi/api/domain"
 )
 
 // UserResolver resolves the user type
 type UserResolver struct {
-	User           *api.User
-	ProjectService api.ProjectService
+	User           *domain.User
+	ProjectService domain.ProjectService
 }
 
 // GetUser resolves the getUser query

@@ -55,6 +55,20 @@ func main() {
 	log.Println("Shut down.")
 }
 
+// Handler is the entrypoint for now
+func Handler(w http.ResponseWriter, r *http.Request) {
+	openDatabase()
+
+	us := &postgres.UserService{DB: db, SigningKey: []byte(signingKey)}
+	ps := &postgres.ProjectService{DB: db}
+
+	schema := graphqlgo.MustParseSchema(graphql.GetRootSchema(), &graphql.Resolver{UserService: us, ProjectService: ps})
+
+	tokenAuth = jwtauth.New("HS256", []byte(signingKey), nil)
+
+	(&relay.Handler{Schema: schema}).ServeHTTP(w, r)
+}
+
 func router() http.Handler {
 	us := &postgres.UserService{DB: db, SigningKey: []byte(signingKey)}
 	ps := &postgres.ProjectService{DB: db}

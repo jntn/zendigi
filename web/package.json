@@ -34,7 +34,8 @@
     "dev": "react-scripts start",
     "start": "serve --single ./build",
     "build": "react-scripts build",
-    "test": "react-scripts test"
+    "test": "react-scripts test",
+    "now-build": "npm run build && mv build dist"
   },
   "devDependencies": {
     "@types/d3-scale": "^2.0.2",
