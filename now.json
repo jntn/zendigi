@@ -1,19 +1,35 @@
 {
     "version": 2,
+    "name": "zendigi",
+    "alias": "zendigi.jntn.se",
     "builds": [
         {
-            "src": "web/package.json",
-            "use": "@now/static-build"
+            "src": "web/build/**/*",
+            "use": "@now/static",
+            "config": {
+                "maxLambdaSize": "10mb"
+            }
         },
         {
-            "src": "api/server.go",
-            "use": "@now/go"
+            "src": "api/index.go",
+            "use": "@now/go",
+            "config": {
+                "maxLambdaSize": "10mb"
+            }
         }
     ],
+    "env": {
+        "DB_CONN": "@db_conn",
+        "SIGNING_KEY": "@signing_key"
+    },
     "routes": [
         {
-            "src": "^/static/(.*)",
-            "dest": "/static/$1"
+            "src": "/graphql/(.*)",
+            "dest": "/api/index.go/$1"
+        },
+        {
+            "src": "^/(.*)",
+            "dest": "/web/build/$1"
         }
     ]
 }

@@ -1,10 +1,6 @@
 {
     "version": 2,
     "name": "zendigi-api",
-    "env": {
-        "DB_CONN": "@db_conn",
-        "SIGNING_KEY": "@signing_key"
-    },
     "builds": [
         {
             "src": "index.go",
@@ -13,5 +9,9 @@
                 "maxLambdaSize": "10mb"
             }
         }
-    ]
+    ],
+    "env": {
+        "DB_CONN": "@db_conn",
+        "SIGNING_KEY": "@signing_key"
+    }
 }
