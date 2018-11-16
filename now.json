@@ -24,11 +24,11 @@
     },
     "routes": [
         {
-            "src": "/graphql/(.*)",
-            "dest": "/api/index.go/$1"
+            "src": "/graphql",
+            "dest": "/api"
         },
         {
-            "src": "^/(.*)",
+            "src": "/(.*)",
             "dest": "/web/build/$1"
         }
     ]

@@ -55,7 +55,7 @@ func openDatabase () {
 // 	log.Println("Shut down.")
 // }
 
-// Handler is the entrypoint for now 2.0
+// Handler is the entrypoint for now
 func Handler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("\n🚀 Zendigi API")
 	openDatabase()
