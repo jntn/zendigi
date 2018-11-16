@@ -1,7 +1,7 @@
 package main
 
 import (
-	//"fmt"
+	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -57,6 +57,7 @@ func openDatabase () {
 
 // Handler is the entrypoint for now 2.0
 func Handler(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("\n🚀 Zendigi API")
 	openDatabase()
 
 	us := &postgres.UserService{DB: db, SigningKey: []byte(signingKey)}
