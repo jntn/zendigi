@@ -1,4 +1,4 @@
-package main // import "github.com/jntn/zendigi/api"
+package main
 
 import (
 	"fmt"
