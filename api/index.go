@@ -1,7 +1,7 @@
 package main
 
 import (
-	"fmt"
+	//"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -57,17 +57,16 @@ func openDatabase () {
 
 // Handler is the entrypoint for now 2.0
 func Handler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Hello from Go on Now 2.0!")
-	// openDatabase()
+	openDatabase()
 
-	// us := &postgres.UserService{DB: db, SigningKey: []byte(signingKey)}
-	// ps := &postgres.ProjectService{DB: db}
+	us := &postgres.UserService{DB: db, SigningKey: []byte(signingKey)}
+	ps := &postgres.ProjectService{DB: db}
 
-	// schema := graphqlgo.MustParseSchema(graphql.GetRootSchema(), &graphql.Resolver{UserService: us, ProjectService: ps})
+	schema := graphqlgo.MustParseSchema(graphql.GetRootSchema(), &graphql.Resolver{UserService: us, ProjectService: ps})
 
-	// tokenAuth = jwtauth.New("HS256", []byte(signingKey), nil)
+	tokenAuth = jwtauth.New("HS256", []byte(signingKey), nil)
 
-	// (&relay.Handler{Schema: schema}).ServeHTTP(w, r)
+	(&relay.Handler{Schema: schema}).ServeHTTP(w, r)
 }
 
 func router() http.Handler {

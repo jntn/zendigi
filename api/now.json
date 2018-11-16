@@ -1,6 +1,10 @@
 {
     "version": 2,
     "name": "zendigi-api",
+    "env": {
+        "DB_CONN": "@db_conn",
+        "SIGNING_KEY": "@signing_key"
+    },
     "builds": [
         {
             "src": "index.go",
@@ -8,12 +12,6 @@
             "config": {
                 "maxLambdaSize": "10mb"
             }
-        }
-    ],
-    "routes": [
-        {
-            "src": "/query",
-            "dest": "/index.go"
         }
     ]
 }
