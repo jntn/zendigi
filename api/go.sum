@@ -79,6 +79,7 @@ github.com/jackc/pgx v3.2.0+incompatible/go.mod h1:0ZGrqGqkRlliWnWB4zKnWtjbSWbGk
 github.com/jmespath/go-jmespath v0.0.0-20160202185014-0b12d6b521d8/go.mod h1:Nht3zPeWKUH0NzdCt2Blrr5ys8VGpn0CEB0cQHVjt7k=
 github.com/jmespath/go-jmespath v0.0.0-20180206201540-c2b33e8439af/go.mod h1:Nht3zPeWKUH0NzdCt2Blrr5ys8VGpn0CEB0cQHVjt7k=
 github.com/jntn/zendigi v0.0.0-20181115200157-b810293a5d10 h1:KtdwSzj711ul7YC4Cxc9zkD/1pt6bxkwJrMraHuvhRs=
+github.com/jntn/zendigi v0.0.0-20181116080514-57ff784dddd9 h1:vpxUSvyZ7tz7kFX0ZOu/aBMzA6T+hCuuoaLLJ1A9I1k=
 github.com/joho/godotenv v1.2.0 h1:vGTvz69FzUFp+X4/bAkb0j5BoLC+9bpqTWY8mjhA9pc=
 github.com/joho/godotenv v1.2.0/go.mod h1:7hK45KPybAkOC6peb+G5yklZfMxEjkZhHbwpqxOKXbg=
 github.com/jteeuwen/go-bindata v3.0.7+incompatible h1:91Uy4d9SYVr1kyTJ15wJsog+esAZZl7JmEfTkwmhJts=

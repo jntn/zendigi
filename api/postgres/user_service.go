@@ -4,7 +4,7 @@ import (
 	"database/sql"
 
 	jwt "github.com/dgrijalva/jwt-go"
-	domain "github.com/jntn/zendigi/domain"
+	domain "github.com/jntn/zendigi/api/domain"
 	_ "github.com/lib/pq" // Import needed for database/sql with postgres
 	"golang.org/x/crypto/bcrypt"
 )

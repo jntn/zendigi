@@ -5,7 +5,7 @@ import (
 	"errors"
 	"fmt"
 
-	domain "github.com/jntn/zendigi/domain"
+	domain "github.com/jntn/zendigi/api/domain"
 	_ "github.com/lib/pq"
 )
 
