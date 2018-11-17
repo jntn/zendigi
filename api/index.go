@@ -55,8 +55,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 
 	tokenAuth = jwtauth.New("HS256", []byte(signingKey), nil)
 
-	middleware.DefaultCompress(middleware.Logger(
-		jwtauth.Verifier(tokenAuth)(&relay.Handler{Schema: schema}))).ServeHTTP(w, r)
+	jwtauth.Verifier(tokenAuth)(&relay.Handler{Schema: schema}).ServeHTTP(w, r)
 }
 
 func router() http.Handler {
