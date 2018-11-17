@@ -6,7 +6,6 @@ require (
 	github.com/cenkalti/backoff v2.0.0+incompatible // indirect
 	github.com/containerd/continuity v0.0.0-20181003075958-be9bd761db19 // indirect
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
-	github.com/go-bindata/go-bindata v1.0.0 // indirect
 	github.com/go-chi/chi v3.3.3+incompatible
 	github.com/go-chi/jwtauth v3.3.0+incompatible
 	github.com/golang-migrate/migrate/v4 v4.0.2
@@ -19,6 +18,4 @@ require (
 	github.com/ory/dockertest v3.3.2+incompatible
 	github.com/sirupsen/logrus v1.1.1 // indirect
 	golang.org/x/crypto v0.0.0-20180927165925-5295e8364332
-	gopkg.in/testfixtures.v2 v2.5.0 // indirect
-	gopkg.in/yaml.v2 v2.2.1 // indirect
 )
