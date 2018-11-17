@@ -1,35 +1,40 @@
 {
-    "version": 2,
-    "name": "zendigi",
-    "alias": "zendigi.jntn.se",
-    "builds": [
-        {
-            "src": "web/build/**/*",
-            "use": "@now/static",
-            "config": {
-                "maxLambdaSize": "10mb"
-            }
-        },
-        {
-            "src": "api/index.go",
-            "use": "@now/go",
-            "config": {
-                "maxLambdaSize": "10mb"
-            }
-        }
-    ],
-    "env": {
-        "DB_CONN": "@db_conn",
-        "SIGNING_KEY": "@signing_key"
+  "version": 2,
+  "name": "zendigi",
+  "alias": "zendigi.jntn.se",
+  "builds": [
+    {
+      "src": "web/build/**/*",
+      "use": "@now/static",
+      "config": {
+        "maxLambdaSize": "10mb"
+      }
     },
-    "routes": [
-        {
-            "src": "/graphql",
-            "dest": "/api"
-        },
-        {
-            "src": "/(.*)",
-            "dest": "/web/build/$1"
-        }
-    ]
+    {
+      "src": "api/index.go",
+      "use": "@now/go",
+      "config": {
+        "maxLambdaSize": "10mb"
+      }
+    }
+  ],
+  "build": {
+    "env": {
+      "GO111MODULE": "auto"
+    }
+  },
+  "env": {
+    "DB_CONN": "@db_conn",
+    "SIGNING_KEY": "@signing_key"
+  },
+  "routes": [
+    {
+      "src": "/graphql",
+      "dest": "/api"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/web/build/$1"
+    }
+  ]
 }

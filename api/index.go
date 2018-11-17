@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -25,6 +24,10 @@ var (
 )
 
 func openDatabase () {
+	if (db != nil) {
+		return
+	}
+
 	err := godotenv.Load()
 
 	conn := os.Getenv("DB_CONN")
@@ -41,23 +44,8 @@ func openDatabase () {
 	}
 }
 
-// func main() {
-// 	if !isTesting {
-// 		openDatabase()
-// 	}
-// 	defer db.Close()
-// 	fmt.Println("\n🚀 Zendigi API")
-// 	fmt.Println("--------------")
-// 	fmt.Printf("  * Starting server on %v\n\n", port)
-
-// 	log.Fatal(http.ListenAndServe(port, router()))
-
-// 	log.Println("Shut down.")
-// }
-
 // Handler is the entrypoint for now
 func Handler(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("\n🚀 Zendigi API")
 	openDatabase()
 
 	us := &postgres.UserService{DB: db, SigningKey: []byte(signingKey)}
@@ -67,7 +55,8 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 
 	tokenAuth = jwtauth.New("HS256", []byte(signingKey), nil)
 
-	(&relay.Handler{Schema: schema}).ServeHTTP(w, r)
+	middleware.DefaultCompress(middleware.Logger(
+		jwtauth.Verifier(tokenAuth)(&relay.Handler{Schema: schema}))).ServeHTTP(w, r)
 }
 
 func router() http.Handler {
@@ -89,7 +78,7 @@ func router() http.Handler {
 		r.Use(middleware.Recoverer)
 	}
 
-	r.Post("/query", (&relay.Handler{Schema: schema}).ServeHTTP)
+	r.Post("/graphql", (&relay.Handler{Schema: schema}).ServeHTTP)
 
 	return r
 }

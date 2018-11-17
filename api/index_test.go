@@ -47,7 +47,7 @@ func TestServer(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			dataJSON, err := json.Marshal(data{Query: tc.query})
 			// fmt.Println(string(dataJSON[:]))
-			req, err := http.NewRequest("POST", "/query", bytes.NewBuffer(dataJSON))
+			req, err := http.NewRequest("POST", "/graphql", bytes.NewBuffer(dataJSON))
 
 			req.Header.Set("Authorization", "bearer "+jwtToken)
 
