@@ -2,6 +2,7 @@ package postgres
 
 import (
 	"database/sql"
+	"time"
 
 	jwt "github.com/dgrijalva/jwt-go"
 	domain "github.com/jntn/zendigi/api/domain"
@@ -78,10 +79,12 @@ func (us *UserService) Login(email string, password string) (string, error) {
 	}
 
 	claims := Claims{
-		"user",
-		u.ID,
-		jwt.StandardClaims{
-			Issuer: "zendigi",
+		Role:   "user",
+		UserID: u.ID,
+		StandardClaims: jwt.StandardClaims{
+			Issuer:    "zendigi",
+			IssuedAt:  time.Now().UTC().Unix(),
+			ExpiresAt: time.Now().UTC().AddDate(0, 1, 0).Unix(),
 		},
 	}
 
